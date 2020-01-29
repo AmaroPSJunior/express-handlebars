@@ -6,7 +6,7 @@
 
 'use strict';
 
-var ExpressHandlebars = require('./lib/express-handlebars');
+var ExpressHandlebars = require('./src/lib/express-handlebars');
 
 exports = module.exports  = exphbs;
 exports.create            = create;
