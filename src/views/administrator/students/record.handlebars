@@ -1,0 +1,219 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Administrador</a></li>
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Alunos</a></li>
+                    <li class="breadcrumb-item active">Novo Aluno</li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+		{{> flash_message}}
+
+        <ul class="nav nav-tabs nav-tabs-fillup" data-init-reponsive-tabs="dropdownfx">
+            <li class="nav-item">
+                <a href="#" class="active" data-toggle="tab" data-target="#tab-1"><span>Dados Gerais</span></a>
+            </li>
+        </ul>
+
+        <form id="form_student" action="<?php echo $route->pathFor('administrator.students.record'); ?>" method="post">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- START card -->
+                    <div class="card card-default full-height">
+                        <div class="card-header ">
+                            <div class="card-title">
+                                Dados Pessoais do Aluno
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5>
+                                Dados Gerais
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>Nome</label>
+                                        <input type="text" class="form-control" required name="first_name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Sobrenome</label>
+                                        <input type="text" class="form-control" name="last_name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-group-default required ">
+                                <label>E-mail</label>
+                                <input type="email" class="form-control" required name="email">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>CPF</label>
+                                        <input type="text" class="form-control" required name="document_cpf"
+                                               data-mask="000.000.000-00" data-mask-reverse="true">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Data de Nascimento</label>
+                                        <input type="text" class="form-control" name="birthday" data-mask="00/00/0000">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>RG</label>
+                                        <input type="text" class="form-control" required name="document_rg">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Orgão Expedidor</label>
+                                        <input type="text" class="form-control" name="document_rg_origem">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>Telefone</label>
+                                        <input type="text" class="form-control" required name="phone"
+                                               data-mask="00 0000.00000">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Celular</label>
+                                        <input type="text" class="form-control" name="cellphone"
+                                               data-mask="00 0000.00000">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class=" form-group form-group-default form-group-default-select2 ">
+                                        <label class="">Polo</label>
+                                        <select id="pole_select" class="full-width select2" data-placeholder="Escolha um Polo" name="pole">
+                                            <option value="" selected> ---</option>
+                                            <optgroup label="Polo">
+												<?php foreach ($poles as $poles) { ?>
+                                                    <option value="<?php echo $poles->getHash(); ?>"><?php echo $poles->getPole(); ?></option>
+												<?php } ?>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class=" form-group form-group-default form-group-default-select2 ">
+                                        <label class="">Representante</label>
+                                        <select id="seller_select" class="full-width select2" data-placeholder="Escolha um Representante" name="seller">
+                                            <option value="" selected> ---</option>
+                                            <optgroup label="Representante">
+												<?php foreach ($sellers as $seller) { ?>
+                                                    <option value="<?php echo $seller->getHash(); ?>"><?php echo $seller->getName(); ?></option>
+												<?php } ?>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h5>
+                                Logradouro
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>CEP</label>
+                                        <input type="text" class="form-control input-zip" required name="zip"
+                                               data-mask="00000-000">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-group-default required ">
+                                <label>Endereço</label>
+                                <input type="text" class="form-control input-address" required name="address">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>Número</label>
+                                        <input type="text" class="form-control" required name="number">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Complemento</label>
+                                        <input type="text" class="form-control" name="complement">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-group-default required">
+                                <label>Bairro</label>
+                                <input type="text" class="form-control input-district" required name="district">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group form-group-default required">
+                                        <label>Cidade</label>
+                                        <input type="text" class="form-control input-city" required name="city">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default required">
+                                        <label>Estado</label>
+                                        <input type="text" class="form-control input-state" required name="state" maxlength="2">
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <br><br>
+
+                            <p class="text-right">
+                                <button type="submit" class="btn btn-info">
+                                    <span>Finalizar Cadastro do Aluno</span>
+                                </button>
+                            </p>
+
+                        </div>
+                    </div>
+                    <!-- END card -->
+                </div>
+            </div>
+
+        </form>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}
+
+<script>
+
+    $("#form_student").validate();
+    $('#pole_select').select2();
+    $('#seller_select').select2();
+
+</script>

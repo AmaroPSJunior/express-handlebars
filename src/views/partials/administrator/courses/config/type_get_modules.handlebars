@@ -1,0 +1,84 @@
+{{> flash_message}}
+
+<div class="table-responsive">
+    <table class="table table-hover" id="basicTable">
+        <thead>
+        <tr>
+            <th width="80">#</th>
+            <th>Módulo</th>
+            <th>Conteúdos</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+		<?php
+		$x = 0;
+		foreach ($type->getModules() as $module) { ?>
+			<?php if ($module->getStatus() == 1) {
+				$x++;
+				?>
+                <tr>
+                    <td class="v-align-middle ">
+                        <p><?php echo $x; ?></p>
+                    </td>
+                    <td class="v-align-middle">
+                        <p><?php echo $module->getModule(); ?></p>
+                    </td>
+                    <td class="v-align-middle">
+                        <p><?php echo $module->getTotalChapters(); ?></p>
+                    </td>
+                    <td class="v-align-middle">
+                        <div class="btn-group">
+                            <button type="button" data-module="<?php echo $module->getModule(); ?>" data-href="<?php echo $route->pathFor('administrator.courses.type.delete.module', ['hash' => $type->getHash(), 'hash_module' => $module->getHash()]); ?>"
+                                    class="btn btn-danger delete_module">excluir
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+				<?php
+			}
+		}
+		?>
+		<?php
+		if ($x == 0) {
+			?>
+            <tr>
+                <td colspan="7">
+                    <h4 class="text-danger text-center"> Nenhum registro encontrado</h4>
+                </td>
+            </tr>
+		<?php } ?>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.delete_module').click(function () {
+            var data_url = $(this).attr('data-href');
+            var data_module = $(this).attr('data-module');
+
+            Swal.fire({
+                title: 'Deseja mesmo exluir o módulo?',
+                text: 'Módulo: ' + data_module,
+                type: 'error',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim!',
+                cancelButtonText: 'Cancelar',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+
+                    return fetch(data_url).then(response => {
+                        list();
+                    }).catch(error => {
+                        location.reload(true)
+                    })
+
+                }
+            })
+
+        })
+    })
+</script>

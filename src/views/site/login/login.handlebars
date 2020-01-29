@@ -1,0 +1,50 @@
+{{> site/h}}
+
+<div class="register-container "><br><br><br>
+    <div class="d-flex justify-content-center flex-column full-width">
+        <p class="text-center"><img src="/client//exatto/logo.png" alt="logo" width="400"></p>
+        <h3 class="text-center">Plataforma Educacional</h3>
+        <form id="form-register" class="p-t-15" role="form" action="echo $route->pathFor('login.in');" method="post">
+
+            {{!-- {{> flash_message}} --}}
+
+            <div class="progress progress_content" style="display: none;">
+                <div class="progress-bar-indeterminate"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group form-group-default">
+                        <label>Usuário</label>
+                        <input type="text" name="user" placeholder="Seu usuário de acesso" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group form-group-default">
+                        <label>Senha</label>
+                        <input type="password" name="password" placeholder="Sua palavra-chave" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 no-padding sm-p-l-10">
+                </div>
+                <div class="col-md-6 d-flex align-items-center justify-content-end">
+                    <a href="#" class="text-info small">Esqueceu a senha? Clique aqui.</a>
+                </div>
+            </div>
+            <br><br>
+            <p class="text-center"> <button class="btn btn-primary btn-lg m-t-10" type="submit">Acessar a Plataforma</button></p>
+        </form>
+    </div>
+</div>
+
+{{> site/f}}
+
+<script>
+    $('#form-register').submit(function(event){
+        $('.progress_content').show();
+        $(this).submit();
+    });
+</script>

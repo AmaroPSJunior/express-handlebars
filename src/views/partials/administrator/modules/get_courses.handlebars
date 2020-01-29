@@ -1,0 +1,73 @@
+
+{{> flash_message}}
+
+<div class="table-responsive">
+    <table class="table table-hover" id="basicTable">
+        <thead>
+        <tr>
+            <th width="100">#</th>
+            <th>Curso</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+		<?php
+		if (count($module->getCourse()) > 0) {
+			$tt = 1;
+			foreach ($module->getCourse() as $m) { ?>
+
+                <tr>
+                    <td class="v-align-middle ">
+                        <p class="text-uppercase"><?php echo $tt; ?></p>
+                    </td>
+                    <td class="v-align-middle">
+                        <p class="text-uppercase"><?php echo $m->getFullNameCourse(); ?></p>
+                    </td>
+                    <td class="v-align-middle">
+                        <div class="btn-group">
+                            <button type="button" data-module="<?php echo $m->getFullNameCourse(); ?>" data-href="<?php echo $route->pathFor('administrator.courses.delete.module', ['hash' => $m->getHash(), 'hash_module' => $module->getHash()]); ?>"
+                                    class="btn btn-danger delete_course">excluir
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+				<?php $tt++;
+			}
+		} else { ?>
+            <tr>
+                <td colspan="6">
+                    <h4 class="text-danger text-center"> Nenhum registro de Cursos Relacionados ao módulo </h4>
+                </td>
+            </tr>
+		<?php } ?>
+        </tbody>
+    </table>
+</div>
+<script>
+    $('.delete_course').click(function () {
+        var data_url = $(this).attr('data-href');
+        var data_module = $(this).attr('data-module');
+
+        Swal.fire({
+            title: 'Deseja mesmo exluir o Curso do módulo?',
+            text: 'Curso: ' + data_module,
+            type: 'error',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim!',
+            cancelButtonText: 'Cancelar',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+
+                return fetch(data_url).then(response => {
+                    listc();
+                }).catch(error => {
+                    location.reload(true)
+                })
+
+            }
+        })
+    })
+</script>

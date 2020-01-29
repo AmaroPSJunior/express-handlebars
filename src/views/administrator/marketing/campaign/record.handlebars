@@ -1,0 +1,208 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Administrador</a></li>
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Marketing</a></li>
+                    <li class="breadcrumb-item"><a href="#">Campanha</a></li>
+                    <li class="breadcrumb-item active">Formulário</li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+		{{> flash_message}}
+
+        <form id="form_campaign" action="<?php echo $route->pathFor('administrator.marketing.campaign.record'); ?><?php echo (is_object($e) ? "/{$e->getHash()}" : null); ?>"
+              method="post">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- START card -->
+                    <div class="card card-default full-height">
+                        <div class="card-header ">
+                            <div class="card-title">
+                                Dados da Campanha
+                            </div>
+                        </div>
+                        <div class="card-body">
+
+                            <h5>Campanha</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>Campanha</label>
+                                        <input type="text" class="form-control" required name="campaign" value="<?php echo (is_object($e)) ? $e->getCampaign() : ''; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>Desconto em %</label>
+                                        <input type="text" class="form-control required" name="discount" value="<?php echo (is_object($e)) ? $e->getDiscount() : ''; ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>Data de Início</label>
+                                        <input type="text" class="form-control required" name="started_at"
+                                               data-mask="00/00/0000" value="<?php echo (is_object($e)) ? $e->getStartedAt()->format('d/m/Y') : ''; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>Data do Término</label>
+                                        <input type="text" class="form-control required" name="finished_at"
+                                              data-mask="00/00/0000"  value="<?php echo (is_object($e)) ? $e->getFinishedAt()->format('d/m/Y') : ''; ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+
+                            <h5>Tipo do Curso</h5>
+                            <input type="hidden" id="count_a" name="count_a" value="0">
+                            <div id="clone" class="col-12">
+
+								<?php if(is_object($e)){ ?>
+								    <?php foreach($e->getCampaignTypes() as $tt){ ?>
+
+                                    <div class="row toclone">
+                                        <div class="col-md-3">
+                                            <div class="col-md-12 form-group form-group-default p-l-10">
+                                                <label class="">Quantidade</label>
+                                                <input type="text" class="form-control input_quantity" name="quantity[E<?php echo $tt->getId()?>]" value="<?php echo $tt->getQuantity()?>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="col-md-12 form-group form-group-default form-group-default-select2 required">
+                                                <label class="">Escolha o Tipo</label>
+                                                <select class="full-width select2 input_type" data-placeholder="Escolha o Tipo" data-init-plugin="select2" name="type[E<?php echo $tt->getId()?>]">
+                                                    <optgroup label="Escolha um Tipo">
+														<?php foreach($types as $type){ ?>
+                                                            <option value="<?php echo $type->getHash(); ?>" <?php echo $tt->getType()->getId() == $type->getId() ? 'selected' : '';?>><?php echo  $type->getFullNameType(); ?></option>
+														<?php } ?>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 btns">
+                                            <div class="btn-group btn-group-justified row w-100">
+
+                                                <div class="btn-group col-4 p-0">
+                                                    <a type="button " class="btn btn-danger w-100 delete">
+                                                        <span class="p-t-5 p-b-5 text-white"> <i class="fa fa-remove fs-15"></i> </span>
+                                                        <br>
+                                                        <span class="fs-11 font-montserrat text-uppercase text-white">Remover</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+									<?php } ?>
+								<?php } ?>
+
+
+                                <div class="row toclone">
+                                    <div class="col-md-3">
+                                        <div class="col-md-12 form-group form-group-default  p-l-10">
+                                            <label class="">Quantidade</label>
+                                            <input type="text" class="form-control input_quantity" name="quantity[0]" value="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="col-md-12 form-group form-group-default form-group-default-select2 ">
+                                            <label class="">Escolha o Tipo</label>
+                                            <select class="full-width select2 input_type" data-placeholder="Escolha o Tipo" data-init-plugin="select2" name="type[0]">
+                                                <optgroup label="Escolha um Tipo">
+													<?php foreach($types as $type){ ?>
+                                                        <option value="<?php echo $type->getHash(); ?>"><?php echo  $type->getFullNameType(); ?></option>
+													<?php } ?>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 btns">
+                                        <div class="btn-group btn-group-justified row w-100">
+                                            <div class="btn-group col-4 p-0">
+                                                <a type="button " class="btn btn-warning w-100 clone">
+                                                    <span class="p-t-5 p-b-5 text-black"> <i class="fa fa-plus fs-15"></i></span>
+                                                    <br>
+                                                    <span class="fs-11 font-montserrat text-black text-uppercase">Adicionar</span>
+                                                </a>
+                                            </div>
+                                            <div class="btn-group col-4 p-0">
+                                                <a type="button " class="btn btn-danger w-100 delete">
+                                                    <span class="p-t-5 p-b-5 text-white"> <i class="fa fa-remove fs-15"></i> </span>
+                                                    <br>
+                                                    <span class="fs-11 font-montserrat text-uppercase text-white">Remover</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <br><br>
+
+                            <p class="text-right">
+                                <button type="submit" class="btn btn-info">
+                                    <span>Salvar Campanha</span>
+                                </button>
+                            </p>
+
+                        </div>
+                    </div>
+                    <!-- END card -->
+                </div>
+            </div>
+        </form>
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}
+
+<script>
+    $(document).ready(function(){
+        $('#clone').cloneya({
+            serializeID: true,
+            cloneButton: '.btns .btn-group .btn-group .clone',
+            deleteButton: '.btns .btn-group .btn-group .delete'
+        })
+            .on('before_clone.cloneya', function (event, toClone, newClone) {
+                var $select = $('.select2').select2();
+                $select.each(function(i,item){
+                    $(item).select2("destroy");
+                });
+
+                var o = $('#count_a').val();
+                var n = eval(o) + 1;
+                $('#count_a').val(n)
+            })
+            .on('after_append.cloneya', function (event, toClone, newClone) {
+                $('select').select2();
+
+                var i = $('#count_a').val();
+                $(newClone).find('.checkbox').val(i);
+                $(newClone).find('.input_quantity').attr('name', "quantity[" + i + "]");
+                $(newClone).find('.input_type').attr('name', "type[" + i + "]");
+            })
+        ;
+    })
+
+    $("#form_campaign").validate();
+</script>

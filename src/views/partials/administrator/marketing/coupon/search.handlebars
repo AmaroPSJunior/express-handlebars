@@ -1,0 +1,52 @@
+<div class="table-responsive">
+    <table class="table table-hover" id="basicTable">
+        <thead>
+        <tr>
+            <th>Cupom</th>
+            <th>Desconto</th>
+            <th>Data do Início</th>
+            <th>Data do Término</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+
+		<?php
+		if (count($result) > 0) {
+			foreach ($result as $r) { ?>
+
+                <tr>
+                    <td class="v-align-middle ">
+                        <p><?php echo $r->getCoupon(); ?></p>
+                    </td>
+                    <td class="v-align-middle">
+                        <p><?php echo $r->getDiscount(); ?>%</p>
+                    </td>
+                      <td class="v-align-middle">
+                        <p><?php echo $r->getStartedAt()->format('d/m/Y'); ?></p>
+                    </td>
+                    <td class="v-align-middle">
+                        <p><?php echo $r->getFinishedAt()->format('d/m/Y'); ?></p>
+                    </td>
+                    <td class="v-align-middle">
+                        <a href="<?php echo $route->pathFor('administrator.marketing.coupon.record', ['hash' => $r->getHash()]); ?> " class="btn btn-secondary w-100">
+                            <span class="p-t-5 p-b-5 "> <i class="fa fa-edit fs-15"></i> </span> <br>
+                            <span class="fs-11 font-montserrat text-uppercase">Abrir Cupom</span>
+                        </a>
+                    </td>
+                </tr>
+
+			<?php }
+		} else { ?>
+
+            <tr>
+                <td colspan="7">
+                    <h4 class="text-danger text-center"> Nenhum registro encontrado</h4>
+                </td>
+            </tr>
+
+		<?php } ?>
+
+        </tbody>
+    </table>
+</div>

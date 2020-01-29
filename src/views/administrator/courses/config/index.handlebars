@@ -1,0 +1,168 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Administrador</a></li>
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Cursos</a></li>
+                    <li class="breadcrumb-item active">Configurações</li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+		{{> flash_message}}
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card card-default">
+                            <div class="card-body">
+                                <h3><span class="semi-bold"><?php echo $type_count; ?></span> tipo(s) </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="<?php echo $route->pathFor('administrator.courses.type.record');?>" class="col-lg-6">
+                        <div class="card card-default bg-primary">
+                            <div class="card-body">
+                                <h3 class=" text-white">+ Tipo</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <form id="form_search_type" class="" role="form">
+                    <div class="form-group form-group-default required ">
+                        <label>Pesquisar</label>
+                        <input id="input-search-type" name="search" type="text" class="form-control" required="">
+                    </div>
+                    <div class="progress progress_type">
+                        <div class="progress-bar-indeterminate"></div>
+                    </div>
+                </form>
+
+
+                <div class="card card-transparent">
+                    <div class="card-header ">
+                        <div class="card-title">Tipos de Curso
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <div id="result_type">
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card card-default">
+                            <div class="card-body">
+                                <h3><span class="semi-bold"><?php echo $category_count; ?></span> categoria(s)</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="<?php echo $route->pathFor('administrator.courses.category.record');?>" class="col-lg-6">
+                        <div class="card card-default bg-primary">
+                            <div class="card-body">
+                                <h3 class=" text-white">+ Categoria</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <form id="form_search_category" class="" role="form">
+                    <div class="form-group form-group-default required ">
+                        <label>Pesquisar</label>
+                        <input id="input-search-category" name="search" type="text" class="form-control" required="">
+                    </div>
+                    <div class="progress progress_category">
+                        <div class="progress-bar-indeterminate"></div>
+                    </div>
+                </form>
+
+                <div class="card card-transparent">
+                    <div class="card-header ">
+                        <div class="card-title">Categorias
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <div id="result_category">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}
+
+
+<script>
+
+    function t() {
+        $('.progress_type').show();
+        $.ajax({
+            method: "POST",
+            url: "<?php echo $route->pathFor('administrator.courses.type.search');?>",
+            data: $('#form_search_type').serialize()
+        })
+            .done(function (html) {
+                $('.progress_type').hide();
+                $("#result_type").html(html);
+            });
+    }
+
+    function c() {
+        $('.progress_category').show();
+        $.ajax({
+            method: "POST",
+            url: "<?php echo $route->pathFor('administrator.courses.category.search');?>",
+            data: $('#form_search_category').serialize()
+        })
+            .done(function (html) {
+                $('.progress_category').hide();
+                $("#result_category").html(html);
+            });
+    }
+
+    $(document).ready(function () {
+
+        $('#input-search-type').terminadedigitar(function () {
+            t();
+        }, 500);
+
+        $('#input-search-category').terminadedigitar(function () {
+            c();
+        }, 500);
+
+    })
+
+    t(); c();
+</script>

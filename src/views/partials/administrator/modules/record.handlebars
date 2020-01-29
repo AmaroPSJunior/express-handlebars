@@ -1,0 +1,349 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Administrador</a></li>
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Módulos</a></li>
+					<?php if (!is_object($module)) { ?>
+                        <li class="breadcrumb-item active">Novo Módulo</li>
+					<?php }else{ ?>
+                        <li class="breadcrumb-item active"><?php echo $module->getModule(); ?></li>
+                    <?php }?>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+		{{> flash_message}}
+
+		<?php if (is_object($module)) { ?>
+        <ul class="nav nav-tabs nav-tabs-fillup" data-init-reponsive-tabs="dropdownfx">
+            <li class="nav-item">
+                <a href="#" class="active" data-toggle="tab" data-target="#tab-1"><span><?php echo $module->getModule(); ?></span></a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="" data-toggle="tab" data-target="#tab-2"><span>Núcleo Comum</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="" data-toggle="tab" data-target="#tab-3"><span>Cursos</span></a>
+            </li>
+        </ul>
+        <?php } ?>
+
+        <div class="tab-content">
+
+            <div class="tab-pane active" id="tab-1">
+                <form id="form_module" role="form" action="<?php echo $route->pathFor('administrator.modules.record'); ?><?php echo is_object($module) ? "/" . $module->getHash() : ''; ?>" enctype="multipart/form-data" method="post"> <div class="row">
+                        <div class="col-lg-12">
+                            <!-- START card -->
+                            <div class="card card-default" style="border:0 ;">
+                                <div class="card-header ">
+                                    <div class="card-title">
+                                        Formulário do Módulo <?php echo is_object($module) ? " - " . $module->getModule() : ''; ?>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+
+                                    <h5>Informações do Módulo</h5>
+                                    <div class="col-md-12 form-group form-group-default required pl-2">
+                                        <label>Nome do Módulo</label>
+                                        <input name="module" type="text" class="form-control input-module" required
+                                               value="<?php echo is_object($module) ? $module->getModule() : ''; ?>">
+                                    </div>
+                                    <br>
+                                    <div id="clone2" class="col-12">
+
+										<?php
+										if (is_object($module)) {
+											if (count($module->getChapters()) > 0) {
+												foreach ($module->getChapters() as $chapter) {
+													if ($chapter->getStatus() == 1) { ?>
+                                                        <div class="row toclone ">
+                                                            <div class="col-md-4 form-group form-group-default pl-2">
+                                                                <label> Referência do arquivo </label>
+                                                                <input name="modules[<?php echo $module->getHash(); ?>][chapter][<?php echo $chapter->getHash() ?>]"
+                                                                       type="hidden" class="form-control"
+                                                                       value="<?php echo $chapter->getChapter() ?>">
+                                                                <strong><?php echo $chapter->getChapter() == '' ? 'Nenhum arquivo enviado' : $chapter->getChapter(); ?></strong>
+                                                            </div>
+                                                            <div class="col-md-3 form-group form-group-default">
+                                                                <label>Anexar Conteúdo</label>
+                                                                <input name="modules[<?php echo $module->getHash(); ?>][content][<?php echo $chapter->getHash() ?>]"
+                                                                       type="file" class="form-control">
+                                                            </div>
+                                                            <div class="col-md-5 btns">
+                                                                <div class="btn-group btn-group-justified row w-100">
+                                                                    <div class="btn-group col-4 p-0">
+                                                                        <a type="button "
+                                                                           class="btn btn-danger w-100 delete">
+                                                            <span class="p-t-5 p-b-5 text-white"> <i
+                                                                        class="fa fa-remove fs-15"></i> </span>
+                                                                            <br>
+                                                                            <span class="fs-11 font-montserrat text-white text-uppercase">Remover</span>
+                                                                        </a>
+                                                                    </div>
+
+																	<?php
+																	$path = __DIR__ . '/../../../../../upload/client/exatto/content/' . $module->getHash() . '/' . $chapter->getContent();
+																	if (file_exists($path)) {
+																		$type = pathinfo($path, PATHINFO_EXTENSION);
+																		$data = file_get_contents($path);
+																		if ($type == 'pdf') {
+																			?>
+                                                                            <div class="btn-group col-4 p-0">
+                                                                                <a href="<?php echo $route->pathFor('content.chapter', ['hash' => $chapter->getHash()]); ?>"
+                                                                                   target="_blank"
+                                                                                   class="btn btn-info w-100">
+                                                                                    <span class="p-t-5 p-b-5 text-white"> <i
+                                                                                                class="fa fa-file fs-15"></i> </span>
+                                                                                    <br>
+                                                                                    <span class="fs-11 font-montserrat text-white text-uppercase">Ver Conteudo</span>
+                                                                                </a>
+                                                                            </div>
+																		<?php }
+																	} ?>
+
+                                                                    <div class="btn-group col-4 p-0">
+                                                                        <a href="<?php echo $route->pathFor('administrator.activities.chapter', ['hash' => $chapter->getHash()]); ?>"
+                                                                           class="btn btn-primary w-100">
+                                                                            <span class="p-t-5 p-b-5 text-white"> <i
+                                                                                        class="fa fa-pencil-square fs-15"></i> </span>
+                                                                            <br>
+                                                                            <span class="fs-11 font-montserrat text-white text-uppercase">Atividades</span>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+													<?php }
+												}
+											}
+										}
+										?>
+
+                                        <div class="row toclone ">
+                                            <div class="col-md-4 form-group form-group-default pl-2">
+                                                <label> Referência do arquivo </label>
+                                                <input name="modules[][chapter][]" type="hidden" class="form-control"
+                                                       value="">
+                                                Nenhum arquivo enviado
+                                            </div>
+                                            <div class="col-md-3 form-group form-group-default">
+                                                <label>Anexar Conteúdo</label>
+                                                <input name="modules[][content][]" type="file" class="form-control">
+                                            </div>
+                                            <div class="col-md-5 btns">
+                                                <div class="btn-group btn-group-justified row w-100">
+                                                    <div class="btn-group col-4 p-0">
+                                                        <a type="button " class="btn btn-warning w-100 clone">
+                                            <span class="p-t-5 p-b-5 text-black"> <i
+                                                        class="fa fa-plus fs-15"></i></span>
+                                                            <br>
+                                                            <span class="fs-11 font-montserrat text-black text-uppercase">Adicionar</span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="btn-group col-4 p-0">
+                                                        <a type="button " class="btn btn-danger w-100 delete">
+                                                    <span class="p-t-5 p-b-5 text-white"> <i
+                                                                class="fa fa-remove fs-15"></i> </span>
+                                                            <br>
+                                                            <span class="fs-11 font-montserrat text-uppercase text-white">Remover</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <br><br>
+                                    <p class="text-right">
+                                        <button type="submit" class="btn btn-info">
+                                            <span>Salvar Informações do Módulo</span>
+                                        </button>
+                                    </p>
+
+                                </div>
+                            </div>
+                            <!-- END card -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+			<?php if (is_object($module)) { ?>
+                <div class="tab-pane" id="tab-2">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card card-default" style="border:0 ;">
+                                <div class="card-header ">
+                                    <div class="card-title">
+                                        Núcleo Comum <?php echo is_object($module) ? " - " . $module->getModule() : ''; ?>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h5>Núcleo Comum</h5>
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-8 col-lg-8 form-group form-group-default form-group-default-select2">
+                                                <label>Adicionar Tipo</label>
+                                                <select id="select_type" class="full-width select2"
+                                                        data-placeholder="Escolha um Tipo" name="type"
+                                                        data-init-plugin="select2">
+                                                    <option value="" selected> ---</option>
+                                                    <optgroup label="Tipo do Curso">
+                                                        <?php foreach ($types as $type) { ?>
+                                                            <option value="<?php echo $type->getHash(); ?>"><?php echo mb_strtoupper($type->getFullNameType()); ?></option>
+                                                        <?php } ?>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 col-lg-4 ">
+                                                <div class="btn-group btn-group-justified row w-100 p-l-10">
+                                                    <div class="btn-group col-4 p-0">
+                                                        <button type="button" class="btn btn-warning w-100"
+                                                                id="add_type">
+                                                            <span class="p-t-5 p-b-5 text-black"> <i
+                                                                        class="fa fa-plus fs-15"></i></span>
+                                                            <br>
+                                                            <span class="fs-11 font-montserrat text-black text-uppercase">Adicionar</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="progress progress_listt"> <div class="progress-bar-indeterminate"></div> </div>
+                                    <div id="list_types"> </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab-3">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card card-default" style="border:0 ;">
+                                <div class="card-header ">
+                                    <div class="card-title">
+                                        Cursos <?php echo is_object($module) ? " - " . $module->getModule() : ''; ?>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h5>Cursos Relacionados</h5>
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-8 col-lg-8 form-group form-group-default form-group-default-select2">
+                                                <label>Adicionar Curso</label>
+                                                <select id="select_course" class="full-width select2"
+                                                        data-placeholder="Escolha um Curso" name="course"
+                                                        data-init-plugin="select2">
+                                                    <option value="" selected> ---</option>
+                                                    <optgroup label="Curso">
+                                                        <?php foreach ($courses as $course) { ?>
+                                                            <option value="<?php echo $course->getHash(); ?>"><?php echo mb_strtoupper($course->getFullNameCourse()); ?></option>
+                                                        <?php } ?>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 col-lg-4 ">
+                                                <div class="btn-group btn-group-justified row w-100 p-l-10">
+                                                    <div class="btn-group col-4 p-0">
+                                                        <button type="button" class="btn btn-warning w-100" id="add_course">
+                                                            <span class="p-t-5 p-b-5 text-black"> <i
+                                                                        class="fa fa-plus fs-15"></i></span>
+                                                            <br>
+                                                            <span class="fs-11 font-montserrat text-black text-uppercase">Adicionar</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="progress progress_listc"> <div class="progress-bar-indeterminate"></div></div>
+                                    <div id="list_courses"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			<?php } ?>
+
+        </div>
+
+    </div>
+</div>
+
+{{> f}}
+
+<script>
+    $('#clone2').cloneya({
+        serializeID: true,
+        cloneButton: '.btns .btn-group .btn-group .clone',
+        deleteButton: '.btns .btn-group .btn-group .delete'
+
+    });
+    $("#form_module").validate();
+
+	<?php if (is_object($module)) { ?>
+    function listt() {
+        $('.progress_listt').show();
+        $.ajax({
+            method: "GET",
+            url: "<?php echo $route->pathFor('administrator.modules.get.types', ['hash' => $module->getHash()]);?>"
+        })
+            .done(function (html) {
+                $('.progress_listt').hide();
+                $("#list_types").html(html);
+            });
+    }
+
+    function listc() {
+        $('.progress_listc').show();
+        $.ajax({
+            method: "GET",
+            url: "<?php echo $route->pathFor('administrator.modules.get.courses', ['hash' => $module->getHash()]);?>"
+        })
+            .done(function (html) {
+                $('.progress_listc').hide();
+                $("#list_courses").html(html);
+            });
+    }
+
+    listc();
+    listt();
+
+    $('#add_type').click(function () {
+        var url = "<?php echo $route->pathFor('administrator.modules.add.type', ['hash' => 'hash_module', 'hash_type' => 'hash_type']);?>";
+        var url_final = url.replace("hash_type", $('#select_type option:selected').val());
+        var url_final2 = url_final.replace("hash_module", "<?php echo $module->getHash(); ?>");
+        $.get(url_final2, function () {
+            listt();
+        })
+    })
+
+    $('#add_course').click(function () {
+        var url = "<?php echo $route->pathFor('administrator.modules.add.course', ['hash' => 'hash_module', 'hash_course' => 'hash_course']);?>";
+        var url_final = url.replace("hash_course", $('#select_course option:selected').val());
+        var url_final2 = url_final.replace("hash_module", "<?php echo $module->getHash(); ?>");
+        $.get(url_final2, function () {
+            listc();
+        })
+    })
+
+	<?php } ?>
+
+</script>
+
+
+

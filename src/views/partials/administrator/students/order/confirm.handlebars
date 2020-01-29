@@ -1,0 +1,178 @@
+
+{{> flash_message}}
+
+<form id="form_student_register_order_finish">
+    <div class="col-md-12">
+        <div class="row b-a b-grey no-margin">
+            <div class="col-md-6 p-l-10 sm-padding-15 align-items-center d-flex">
+                <div class="col-md-6">
+                    <h5 class="font-montserrat all-caps small no-margin hint-text bold">Status</h5>
+                    <p class="no-margin"><?php echo $order->showStatus(); ?></p>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="font-montserrat all-caps small no-margin hint-text bold">Forma de Pagamento</h5>
+                    <p class="no-margin"><?php echo $order->getMethod()->getMethod(); ?></p>
+                </div>
+            </div>
+            <div class="col-md-6 text-right bg-primary padding-10">
+                <h5 class="font-montserrat all-caps small no-margin hint-text text-white bold">Matrícula</h5>
+                <h4 class="no-margin text-white"><?php echo $order->getHash(); ?></h4>
+            </div>
+        </div>
+        <br>
+        <h5>Cursos</h5>
+        <table class="table table-condensed">
+            <tbody>
+            <thead>
+            <th>Curso</th>
+            <th class="text-right">Valor</th>
+            </thead>
+			<?php foreach ($order->getOrderCourses() as $cours) { ?>
+                <tr>
+                    <td class=" col-lg-2 col-md-3 col-sm-3 text-left">
+                <span>
+                    <?php echo $cours->getCourses()->getFullNameCourse(); ?>
+                </span>
+                    </td>
+                    <td class=" col-lg-2 col-md-3 col-sm-2 text-right">
+                        <h4 class="text-primary no-margin">
+                            R$ <?php echo number_format($cours->getCourses()->getType()->getPrice(), 2, ',', '.'); ?>
+                        </h4>
+                    </td>
+                </tr>
+
+			<?php } ?>
+            </tbody>
+        </table>
+    </div>
+    <br><br>
+    <div class="col-md-12">
+        <h5>Parcelas</h5>
+        <table class="table table-condensed">
+            <tbody>
+            <thead>
+            <th width="150px">Parcela</th>
+            <th>Vencimento</th>
+            <th class="text-right">Valor</th>
+            </thead>
+			<?php foreach ($order->getInstallmentDue() as $item) { ?>
+                <tr>
+                    <td class=" text-left">
+                    <span>
+                        <?php echo $item->getInstallments(); ?>
+                    </span>
+                    </td>
+                    <td class=" text-left">
+                    <span>
+                        <div class="form-group form-group-default required">
+                            <input type="text" class="form-control"
+                                   name="installments[<?php echo $item->getHash(); ?>]"
+                                   value="<?php echo $item->getFinishedIn()->format('d/m/Y'); ?>" maxlength="10">
+                        </div>
+                    </span>
+                    </td>
+                    <td class="  text-right">
+                        <h4 class="text-primary no-margin">
+                            R$ <?php echo number_format($item->getPrice(), 2, ',', '.'); ?>
+                        </h4>
+                    </td>
+                </tr>
+
+			<?php } ?>
+            </tbody>
+        </table>
+        <br>
+        <div class="row b-a b-grey no-margin">
+            <div class="col-md-3 p-l-10 sm-padding-15 align-items-center d-flex">
+                <div>
+                    <h5 class="font-montserrat all-caps small no-margin hint-text bold">Desconto (%)</h5>
+                    <p class="no-margin"><?php echo $order->getDiscount(); ?></p>
+                </div>
+            </div>
+            <div class="col-md-3 col-middle sm-padding-15 align-items-center d-flex">
+                <div>
+                    <h5 class="font-montserrat all-caps small no-margin hint-text bold">Juros (%)</h5>
+                    <p class="no-margin"><?php echo $order->getInterest(); ?></p>
+                </div>
+            </div>
+            <div class="col-md-6 text-right bg-primary padding-10">
+                <h5 class="font-montserrat all-caps small no-margin hint-text text-white bold">Valor Total</h5>
+                <h4 class="no-margin text-white">
+                    R$ <?php echo number_format($order->getPriceFinal(), 2, ',', '.'); ?></h4>
+            </div>
+        </div>
+    </div>
+</form>
+
+<br><br>
+<div class="row">
+
+    <div class="col-sm-6">
+
+        <div class="text-left">
+            <div class="btn-group btn-group-lg">
+
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-6">
+        <div class="text-right">
+            <div class="btn-group btn-group-lg">
+                <button id="delete_order" data-href="<?php echo $route->pathFor('administrator.financial.order.cancel', ['hash' => $order->getHash()]);?>" type="button" class="btn btn-danger btn-cons"><i class="fa fa-remove"></i> Cancelar</button>
+                <button type="button" id="submit_order_finish" class="btn btn-success btn-cons">Finalizar <i class="fa fa-arrow-circle-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    $('input').mask('##/##/####');
+
+    $("#submit_order_finish").click(function () {
+
+        $('.progress_order').show();
+        $.ajax({
+            method: "POST",
+            datType: 'JSONP',
+            url: "<?php echo $route->pathFor('administrator.students.financial.finish', ['hash' => $order->getHash()]); ?>",
+            data: $("#form_student_register_order_finish").serialize(),
+            success: function (data) {
+                var obj = jQuery.parseJSON(data);
+                if (!obj.error) {
+                    location.reload();
+                }else{
+                    openOrderPendent("<?php echo $order->getHash(); ?>");
+                }
+            }
+        })
+
+    });
+
+    $('#delete_order').click(function () {
+        var data_url = $(this).attr('data-href');
+        Swal.fire({
+            title: 'Deseja mesmo cancelar a matrícula?',
+            type: 'error',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim!',
+            cancelButtonText: 'Não',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+
+                return fetch(data_url).then(response => {
+                    location.reload(true)
+                }).catch(error => {
+                    location.reload(true)
+                })
+
+            }
+        })
+
+    });
+
+</script>

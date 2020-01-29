@@ -1,0 +1,156 @@
+<div id="card_activity" class="card card-transparent">
+    <div class="card-body">
+
+        <form id="form_activity">
+            <input type="hidden" name="hash_question"
+                   value="<?php echo (is_object($question)) ? $question->getHash() : 0; ?>">
+            <input type="hidden" name="hash_activity"
+                   value="<?php echo (is_object($chapter)) ? $chapter->getActivities()->getHash() : 0; ?>">
+
+            <div class="row" id="questions">
+                <div class="col-md-12">
+                    <div class="col-md-12 " style="padding-left: 10px;">
+                        <h5>Enunciado</h5>
+                        <div id="editor"><?php echo (is_object($question)) ? $question->getQuestion() : ''; ?></div>
+                    </div>
+                </div>
+                <div class="clone col-12">
+                    <h5>Respostas</h5>
+
+					<?php $x = 0;
+					if (is_object($question)) { ?>
+
+						<?php foreach ($question->getAnswers() as $answer) { ?>
+                            <div class="row toclone class_anwsers">
+
+                                <div class="col-md-6">
+                                    <div class="col-md-12 form-group form-group-default required"
+                                         style="padding-left: 10px">
+                                        <label>Resposta</label>
+                                        <input name="answer[<?php echo (is_object($answer)) ? $answer->getHash() : ''; ?>]"
+                                               type="text" class="form-control" required
+                                               value="<?php echo $answer->getAnswer(); ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    Correto? <input type="checkbox"
+                                                    name="correct"
+                                                    value="<?php echo (is_object($answer)) ? $answer->getHash() : $x; ?>"
+										<?php echo (($answer->getRight() == 1)) ? 'checked' : ''; ?> />
+                                </div>
+                                <div class="col-md-4 btns">
+                                    <div class="btn-group btn-group-justified row w-100">
+                                        <div class="btn-group col-6 p-0">
+                                            <a type="button " class="btn btn-danger w-100 delete">
+                                                <span class="p-t-5 p-b-5 text-white"> <i class="fa fa-remove fs-15"></i> </span>
+                                                <br>
+                                                <span class="fs-11 font-montserrat text-uppercase text-white">Remover</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+							<?php $x++;
+						} ?>
+
+					<?php } ?>
+
+                    <input type="hidden" id="count_a" name="count_a" value="<?php echo $x; ?>">
+
+                    <div class="row toclone class_anwsers">
+                        <div class="col-md-6">
+                            <div class="col-md-12 form-group form-group-default required" style="padding-left: 10px">
+                                <label>Resposta</label>
+                                <input name="answer[0]" type="text" class="form-control input_a" required>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            Correto? <input type="checkbox" class="checkbox" name="correct" value="0"/>
+                        </div>
+                        <div class="col-md-4 btns">
+                            <div class="btn-group btn-group-justified row w-100">
+                                <div class="btn-group col-6 p-0">
+                                    <a type="button " class="btn btn-warning w-100 clone">
+                                        <span class="p-t-5 p-b-5 text-black"> <i
+                                                    class="fa fa-plus fs-15"></i></span><br>
+                                        <span class="fs-11 font-montserrat text-black text-uppercase">Adicionar</span>
+                                    </a>
+                                </div>
+                                <div class="btn-group col-6 p-0">
+                                    <a type="button " class="btn btn-danger w-100 delete">
+                                        <span class="p-t-5 p-b-5 text-white"> <i class="fa fa-remove fs-15"></i> </span><br>
+                                        <span class="fs-11 font-montserrat text-uppercase text-white">Remover</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br><br>
+                </div>
+            </div>
+            <br><br>
+            <p class="text-right">
+                <button type="button" id="submit_activity" class="btn btn-info"><span> Salvar Atividade </span></button>
+            </p>
+        </form>
+
+    </div>
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+        $('.clone').cloneya({
+            serializeID: true,
+            cloneButton: '.btns .btn-group .btn-group .clone',
+            deleteButton: '.btns .btn-group .btn-group .delete',
+            preserveChildCount: true
+        })
+            .on('before_clone.cloneya', function (event, toClone, newClone) {
+
+                var o = $('#count_a').val();
+                var n = eval(o) + 1;
+                $('#count_a').val(n)
+
+            })
+            .on('after_append.cloneya', function (event, toClone, newClone) {
+                var i = $('#count_a').val();
+                $(newClone).find('.checkbox').val(i);
+                $(newClone).find('.input_a').attr('name', "answer[" + i + "]");
+
+            });
+
+
+        $("#submit_activity").click(function () {
+
+            $.ajax({
+                method: "PUT",
+                datType: 'JSON',
+                url: "<?php echo $route->pathFor('administrator.activities.put.chapter'); ?>",
+                data: $("#form_activity").serialize(),
+                success: function (html) {
+
+                    list();
+                    form();
+                },
+                error: function () {
+
+                }
+            })
+
+        });
+
+        $('#editor').trumbowyg({
+            btns: [
+                ['strong', 'em'],
+                ['justifyLeft', 'justifyCenter'],
+                ['link']
+            ]
+        });
+
+
+    })
+</script>
+

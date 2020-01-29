@@ -1,0 +1,49 @@
+<div class="table-responsive">
+    <table class="table table-hover" id="basicTable">
+        <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>Valor</th>
+            <th>Status</th>
+            <th>Última Atualização</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+
+		<?php
+		if (count($result) > 0) {
+			foreach ($result as $r) { ?>
+                <tr>
+                    <td class="v-align-middle ">
+                        <p><?php echo $r->getType(); ?> - <?php echo $r->getTime(); ?> horas</p>
+                    </td>
+                    <td class="v-align-middle ">
+                        <p>R$ <?php echo number_format($r->getPrice(), 2, ',', '.'); ?> </p>
+                    </td>
+                    <td class="v-align-middle">
+                        <p> Ativo </p>
+                    </td>
+                    <td class="v-align-middle">
+                        <a href="<?php echo $route->pathFor('administrator.courses.type.record', ['hash' => $r->getHash()]); ?> "
+                           class="btn btn-secondary w-100 ">
+                            <span class="p-t-5 p-b-5 "> <i class="fa fa-edit fs-15"></i> </span> <br>
+                            <span class="fs-11 font-montserrat text-uppercase">Editar</span>
+                        </a>
+                    </td>
+                </tr>
+
+			<?php }
+		} else { ?>
+
+            <tr>
+                <td colspan="4">
+                    <h4 class="text-danger text-center"> Nenhum registro encontrado</h4>
+                </td>
+            </tr>
+
+		<?php } ?>
+
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,91 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Meus Cursos</a></li>
+                    <li class="breadcrumb-item"><a href="#">Módulo</a></li>
+                    <li class="breadcrumb-item"><a href="#">Atividades</a></li>
+                    <li class="breadcrumb-item active">Questionário</li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+		{{> flash_message}}
+
+
+        <form id="form_questions" action="<?php echo $route->pathFor('student.activities.finish', ['hash' => $activities->getHash(), 'hash_order_course' => $order_course->getHash()]); ?>" method="post">
+
+            <div class="row">
+                <div class="card card-default">
+                    <div class="card-header ">
+                        <div class="card-title">
+                            Atividade - <?php echo $activities->getChapter()->getChapter(); ?>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+						<?php
+						$x = 1;
+						foreach ($questions as $question) { ?>
+
+                            <h4><?php echo $question->getQuestion(); ?></h4>
+                            <label for="question[<?php echo $question->getHash() ?>]" class="error" style="display:none;" data-msg-required="Obrigatório a escolha de uma resposta" ></label>
+                            <table class="table table-hover" id="basicTable">
+                                <tbody>
+								<?php
+								foreach ($question->getAnswers() as $answer) { ?>
+                                    <tr>
+                                        <td width="50" style="padding: 0;">
+                                            <div class="radio radio-success required">
+                                                <input type="radio" value="<?php echo $answer->getHash(); ?>" name="question[<?php echo $question->getHash() ?>]" id="<?php echo $answer->getHash(); ?>" required>
+                                                <label for="<?php echo $answer->getHash(); ?>">
+													<?php echo $answer->getAnswer(); ?>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+								<?php } ?>
+                                </tbody>
+                            </table>
+                            <br><br>
+
+							<?php $x++;
+						} ?>
+
+                        <div class="row">
+                            <div class="col-sm-12 text-center">
+                                <button class="btn btn-primary btn-lg" type="submit"> Enviar Respostas</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}
+
+<script>
+    jQuery.extend(jQuery.validator.messages, {
+        required: "É obrigatório responder essa questão"
+    });
+    $("#form_questions").validate();
+</script>

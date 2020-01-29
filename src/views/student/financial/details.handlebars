@@ -1,0 +1,237 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Financeiro</a></li>
+                    <li class="breadcrumb-item"><a href="#">Matrícula</a></li>
+                    <li class="breadcrumb-item active">Detalhes</li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+		{{> flash_message}}
+
+        <ul class="nav nav-tabs nav-tabs-fillup" data-init-reponsive-tabs="dropdownfx">
+            <li class="nav-item">
+                <a href="#" class="active" data-toggle="tab" data-target="#tab-1"><span>Matrícula (<?php echo $order->getHash(); ?>)</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="" data-toggle="tab" data-target="#tab-2"><span>Cursos Inclusos</span></a>
+            </li>
+        </ul>
+        <div class="tab-content">
+
+            <div class="tab-pane active" id="tab-1">
+                <div class="card card-default full-height" style="border: 0">
+                    <div class="card-body">
+                        <h5>Detalhes da Matrícula: <strong><?php echo $order->getHash(); ?></strong></h5>
+                        <!-- START card -->
+                        <div class="card card-transparent">
+                            <div class="card-body padding-0">
+                                <div class="row">
+                                    <div class="col-xl-2 col-md-4 col-sm-6">
+                                        <!-- START card -->
+                                        <div class="card card-transparent">
+                                            <div class="card-body">
+                                                <div class="card-title"><h4>Cursos</h4></div>
+                                                <h5><strong><?php echo count( $order->getOrderCourses()); ?></strong></h5>
+                                            </div>
+                                        </div>
+                                        <!-- END card -->
+                                    </div>
+                                    <div class=" col-xl-2 col-md-4 col-sm-6">
+                                        <!-- START card -->
+                                        <div class="card card-transparent">
+                                            <div class="card-body">
+                                                <div class="card-title"><h4>Valor</h4></div>
+                                                <h5><strong>
+                                                        R$<?php echo number_format($order->getPrice(), 2, ',', '.'); ?></strong>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                        <!-- END card -->
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-sm-6">
+                                        <!-- START card -->
+                                        <div class="card card-transparent">
+                                            <div class="card-body">
+                                                <div class="card-title"><h4>Desconto</h4></div>
+                                                <h5><strong><?php echo $order->getDiscount(); ?>%</strong></h5>
+                                            </div>
+                                        </div>
+                                        <!-- END card -->
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-sm-6">
+                                        <!-- START card -->
+                                        <div class="card card-transparent">
+                                            <div class="card-body">
+                                                <div class="card-title"><h4>Valor Final</h4></div>
+                                                <h5>
+                                                    <strong>R$<?php echo number_format($order->getPriceFinal(), 2, ',', '.'); ?></strong>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                        <!-- END card -->
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-sm-6">
+                                        <!-- START card -->
+                                        <div class="card card-transparent">
+                                            <div class="card-body">
+                                                <div class="card-title"><h4>Parcelas</h4></div>
+                                                <h5><strong><?php echo $order->getInstallments(); ?>x</strong></h5>
+                                            </div>
+                                        </div>
+                                        <!-- END card -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END card -->
+
+
+                        <h5> Parcelas </h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="basicTable">
+                                <thead>
+                                <tr>
+                                    <th>Parcela</th>
+                                    <th>Valor</th>
+                                    <th>Vencimento</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+								<?php
+								if (count($order->getInstallmentDue()) > 0) {
+								    /**
+                                     * @var \App\Entity\School\Order\OrderInstallment $installment
+								    */
+									foreach ($order->getInstallmentDue() as $installment) { ?>
+
+                                        <tr>
+                                            <td class="v-align-middle ">
+                                                <p>#<?php echo $installment->getInstallments(); ?></p>
+                                            </td>
+                                            <td class="v-align-middle">
+                                                <p>
+                                                    R$<?php echo number_format($installment->getPrice(), 2, ',', '.'); ?></p>
+                                            </td>
+                                            <td class="v-align-middle">
+                                                <p><?php echo $installment->getFinishedIn()->format('d/m/Y'); ?></p>
+                                            </td>
+                                            <td class="v-align-middle">
+                                                <p>
+													<?php echo $installment->showStatus(); ?>
+                                                </p>
+                                            </td>
+                                            <td class="v-align-middle">
+												<?php if (!is_null($installment->getFile())) { ?>
+													<?php if ($installment->getStatus() == 1) { ?>
+                                                        <a href="<?php echo $installment->getFile(); ?>" target="_blank "
+                                                           class="btn btn-secondary w-100 ">
+                                                            <span class="p-t-5 p-b-5 "> <i class="fa fa-file fs-15"></i> </span>
+                                                            <br>
+                                                            <span class="fs-11 font-montserrat text-uppercase">Baixar Boleto</span>
+                                                        </a>
+													<?php } ?>
+													<?php if ($installment->getStatus() == 3) { ?>
+                                                        <a href="#"
+                                                           class="btn btn-secondary w-100 delete">
+                                                            <span class="p-t-5 p-b-5 "> <i class="fa fa-file fs-15"></i> </span>
+                                                            <br>
+                                                            <span class="fs-11 font-montserrat text-uppercase">Baixar 2 VIA</span>
+                                                        </a>
+													<?php } ?>
+												<?php } ?>
+                                            </td>
+                                        </tr>
+
+									<?php }
+								} else { ?>
+
+                                    <tr>
+                                        <td colspan="6">
+                                            <h4 class="text-danger text-center"> Nenhum registro encontrado</h4>
+                                        </td>
+                                    </tr>
+
+								<?php } ?>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="tab-2">
+                <div class="card card-default full-height" style="border: 0">
+                    <div class="card-body">
+                        <h5>
+                            Cursos Inclusos na Matrícula
+                        </h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="basicTable">
+                                <thead>
+                                <tr>
+                                    <th width="140"></th>
+                                    <th>Curso</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+								<?php
+								if (count($order->getOrderCourses()) > 0) {
+									foreach ($order->getOrderCourses() as $course) { ?>
+
+                                        <tr>
+                                            <td class="v-align-middle">
+												<?php if (is_null($course->getCourses()->getThumb())) { ?>
+                                                    <img src="/client/demos/thumb_course.jpg" width="140">
+												<?php } else { ?>
+                                                    <img src="<?php echo $route->pathFor('course.thumb', ['hash' => $course->getCourses()->getHash()]); ?>" width="140">
+												<?php } ?>
+                                            </td>
+                                            <td class="v-align-middle">
+                                                <p><?php echo $course->getCourses()->getFullNameCourse(); ?></p>
+                                            </td>
+                                        </tr>
+
+									<?php }
+								} else { ?>
+
+                                    <tr>
+                                        <td colspan="6">
+                                            <h4 class="text-danger text-center"> Nenhum registro encontrado</h4>
+                                        </td>
+                                    </tr>
+
+								<?php } ?>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+{{> f}}

@@ -1,0 +1,179 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Administrador</a></li>
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+        <h3>Dashboard</h3>
+        <div class="row">
+
+            <div class="col-lg-3">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <h3>
+                            <span class="semi-bold"><?php echo $courses; ?> </span> curso(s) </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <h3>
+                            <span class="semi-bold"><?php echo $students; ?> </span> aluno(s) </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <h3>
+                            <span class="semi-bold"><?php echo $commercial; ?></span> vendedor(es)</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <h3>
+                            <span class="semi-bold"><?php echo $academic; ?></span> tutor(es)</h3>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <h4>Ações Rápidas</h4>
+        <div class="row">
+            <a href="<?php echo $route->pathFor('administrator.students.record'); ?>" class="col-lg-3">
+                <div class="card card-default bg-primary bg-light">
+                    <div class="card-body">
+                        <h3 class="text-white">+ Aluno</h3>
+                    </div>
+                </div>
+            </a>
+            <a href="<?php echo $route->pathFor('administrator.courses.record.one'); ?>" class="col-lg-3">
+                <div class="card card-default  bg-warning-dark">
+                    <div class="card-body">
+                        <h3 class="text-white">+ Curso</h3>
+                    </div>
+                </div>
+            </a>
+            <a href="<?php echo $route->pathFor('administrator.activities.record'); ?>" class="col-lg-3">
+                <div class="card card-default bg-info-light">
+                    <div class="card-body">
+                        <h3 class="text-white">+ Atividade</h3>
+                    </div>
+                </div>
+            </a>
+            <a href="<?php echo $route->pathFor('administrator.commercial.sellers.record'); ?>" class="col-lg-3">
+                <div class="card card-default bg-info-dark">
+                    <div class="card-body">
+                        <h3 class="text-white">+ Vendedor</h3>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12" id="container">
+
+            </div>
+        </div>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}
+
+
+<script>
+
+    $(document).ready(function () {
+
+        Highcharts.chart('container', {
+            title: {
+                text: 'Visão Geral - Aluno X Curso Iniciado X Curso Finalizado'
+            },
+            xAxis: {
+                categories: ['Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+            },
+            labels: {
+                items: [{
+                    html: 'Alunos X Sexo',
+                    style: {
+                        left: '65px',
+                        top: '18px',
+                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'black'
+                    }
+                }]
+            },
+            yAxis: {
+                title: {
+                    text: 'Valor Unitário'
+                }
+            },
+            series: [{
+                type: 'column',
+                name: 'Cursos Iniciado',
+                data: [3, 2, 1, 3, 4],
+                color: Highcharts.getOptions().colors[7]
+            }, {
+                type: 'column',
+                name: 'Cursos Finalizados',
+                data: [2, 3, 5, 7, 6],
+                color: Highcharts.getOptions().colors[8]
+            }, {
+                type: 'spline',
+                name: 'Média de Acessos',
+                data: [3, 2.67, 3, 6.33, 3.33],
+                marker: {
+                    lineWidth: 2,
+                    lineColor: Highcharts.getOptions().colors[3],
+                    fillColor: 'white'
+                }
+            }, {
+                type: 'pie',
+                name: '',
+                data: [{
+                    name: 'Masculino',
+                    y: 13,
+                    color: Highcharts.getOptions().colors[0] // Jane's color
+                }, {
+                    name: 'Feminino',
+                    y: 23,
+                    color: Highcharts.getOptions().colors[5] // John's color
+                }, {
+                    name: 'Não Declarado ',
+                    y: 2,
+                    color: Highcharts.getOptions().colors[3] // Joe's color
+                }],
+                center: [100, 80],
+                size: 100,
+                showInLegend: false,
+                dataLabels: {
+                    enabled: false
+                }
+            }]
+        });
+
+    })
+
+</script>

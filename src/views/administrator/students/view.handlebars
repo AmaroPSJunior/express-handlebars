@@ -1,0 +1,848 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Administrador</a></li>
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Alunos</a></li>
+                    <li class="breadcrumb-item"><a href="#">Matrícula</a></li>
+                    <li class="breadcrumb-item active"><?php echo $student->getName(); ?></li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+		{{> flash_message}}
+
+        <ul class="nav nav-tabs nav-tabs-fillup" data-init-reponsive-tabs="dropdownfx">
+            <li class="nav-item">
+                <a href="#" class="active" data-toggle="tab" data-target="#tab-1"><span><?php echo $student->getName(); ?></span></a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="" data-toggle="tab" data-target="#tab-5"><span>Documentos</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="" data-toggle="tab" data-target="#tab-6"><span>Acessos</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="" data-toggle="tab" data-target="#tab-3"><span>Cursos Matriculados</span></a>
+            </li>
+            <li class="nav-item" id="nav-financial">
+                <a href="#" class="" data-toggle="tab" data-target="#tab-4"><span>Financeiro</span></a>
+            </li>
+            <li class="nav-item" id="nav-order">
+                <a href="#" class="" data-toggle="tab" data-target="#tab-2"><span>Nova Matricula</span></a>
+            </li>
+
+        </ul>
+
+
+        <div class="tab-content">
+
+            <!-- DADOS -->
+            <div class="tab-pane active" id="tab-1">
+                <form id="form_student"
+                      action="<?php echo $route->pathFor('administrator.students.view', ['hash' => $student->getHash()]); ?>"
+                      method="post">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- START card -->
+                            <div class="card card-default full-height" style="border: 0">
+                                <div class="card-header ">
+                                    <div class="card-title">
+                                        Dados Pessoais do Aluno
+                                        - <?php echo $student->getFirstName() . ' ' . $student->getLastName(); ?>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h5>
+                                        Dados Gerais
+                                    </h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default required">
+                                                <label>Nome</label>
+                                                <input type="text" class="form-control" required name="first_name"
+                                                       value="<?php echo $student->getFirstName(); ?>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label>Sobrenome</label>
+                                                <input type="text" class="form-control" name="last_name"
+                                                       value="<?php echo $student->getLastName(); ?>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-group-default required ">
+                                        <label>E-mail</label>
+                                        <input type="email" class="form-control" required name="email"
+                                               value="<?php echo $student->getEmail(); ?>">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default required">
+                                                <label>CPF</label>
+                                                <input type="text" class="form-control" required name="document_cpf"
+                                                       data-mask="000.000.000-00" data-mask-reverse="true"
+                                                       value="<?php echo $student->getDocumentCpf(); ?>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label>Data de Nascimento</label>
+                                                <input type="text" class="form-control" name="birthday"
+                                                       data-mask="00/00/0000"
+                                                       value="<?php echo is_object($student->getBirthday()) ? $student->getBirthday()->format('d/m/Y') : ''; ?>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default required">
+                                                <label>RG</label>
+                                                <input type="text" class="form-control" required name="document_rg"
+                                                       value="<?php echo $student->getDocumentRg(); ?>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label>Orgão Expedidor</label>
+                                                <input type="text" class="form-control" name="document_rg_origem"
+                                                       value="<?php echo $student->getDocumentRgOrigem(); ?>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label>Telefone</label>
+                                                <input type="text" class="form-control" required name="phone"
+                                                       data-mask="00 0000.00000"
+                                                       value="<?php echo $student->getPhone(); ?>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label>Celular</label>
+                                                <input type="text" class="form-control" name="cellphone"
+                                                       data-mask="00 0000.00000"
+                                                       value="<?php echo $student->getCellPhone(); ?>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class=" form-group form-group-default form-group-default-select2 ">
+                                                <label class="">Polo</label>
+                                                <select id="module_select" class="full-width select2" data-placeholder="Escolha um Polo" name="pole">
+                                                    <option value="" selected> ---</option>
+                                                    <optgroup label="Polo">
+														<?php foreach ($poles as $poles) { ?>
+                                                            <option value="<?php echo $poles->getHash(); ?>" <?php echo (is_object($student->getPole()) && $student->getPole()->getHash() == $poles->getHash()) ? 'selected' : ''; ?>><?php echo $poles->getPole(); ?></option>
+														<?php } ?>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class=" form-group form-group-default form-group-default-select2 ">
+                                                <label class="">Representante</label>
+                                                <select id="module_select" class="full-width select2" data-placeholder="Escolha um Representante" name="seller">
+                                                    <option value="" selected> ---</option>
+                                                    <optgroup label="Representante">
+														<?php foreach ($sellers as $seller) { ?>
+                                                            <option value="<?php echo $seller->getHash(); ?>" <?php echo (is_object($student->getSeller()) && $student->getSeller()->getHash() == $seller->getHash()) ? 'selected' : ''; ?>><?php echo $seller->getName(); ?></option>
+														<?php } ?>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h5>
+                                        Logradouro
+                                    </h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default required">
+                                                <label>CEP</label>
+                                                <input type="text" class="form-control input-zip" required name="zip"
+                                                       value="<?php echo $student->getAddress()->getZip(); ?>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-group-default required ">
+                                        <label>Endereço</label>
+                                        <input type="text" class="form-control input-address" required name="address"
+                                               value="<?php echo $student->getAddress()->getAddress(); ?>">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default required">
+                                                <label>Número</label>
+                                                <input type="text" class="form-control" required name="number"
+                                                       value="<?php echo $student->getAddress()->getNumber(); ?>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label>Complemento</label>
+                                                <input type="text" class="form-control" name="complement"
+                                                       value="<?php echo $student->getAddress()->getComplement(); ?>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-group-default required">
+                                        <label>Bairro</label>
+                                        <input type="text" class="form-control input-district" required name="district"
+                                               value="<?php echo $student->getAddress()->getDistrict(); ?>">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group form-group-default required">
+                                                <label>Cidade</label>
+                                                <input type="text" class="form-control input-city" required name="city"
+                                                       value="<?php echo $student->getAddress()->getCity(); ?>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group form-group-default required">
+                                                <label>Estado</label>
+                                                <input type="text" class="form-control input-state" required
+                                                       name="state"
+                                                       maxlength="2"
+                                                       value="<?php echo $student->getAddress()->getState(); ?>">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <br><br>
+
+                                    <p class="text-right">
+                                        <button type="submit" class="btn btn-info">
+                                            <span>Salvar Dados </span>
+                                        </button>
+                                    </p>
+
+                                </div>
+                            </div>
+                            <!-- END card -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- NOVA MATRICULA -->
+            <div class="tab-pane" id="tab-2">
+
+                <div class="card card-default full-height" style="border: 0">
+                    <div class="card-header ">
+                        <div class="card-title">
+                            Nova Matricula - <?php echo $student->getFirstName() . ' ' . $student->getLastName(); ?>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <ul class="nav nav-tabs nav-tabs-linetriangle nav-tabs-separator nav-stack-sm d-none d-md-flex d-lg-flex d-xl-flex"
+                            role="tablist" data-init-reponsive-tabs="dropdownfx">
+                            <li class="nav-item ">
+                                <a id="order_step1" class="active show disabled" data-target="#tab1" role="tab"
+                                   aria-selected="true"><i class="fa fa-shopping-cart tab-icon"></i> <span>1) Dados da Matrícula</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="order_step2" class="disabled" data-toggle="tab" data-target="#tab2" role="tab"
+                                   aria-selected="false"><i class="fa fa-truck tab-icon"></i> <span>2) Confirmar Informações </span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="order_step3" class="disabled" data-toggle="tab" data-target="#tab3" role="tab"
+                                   aria-selected="false"><i class="fa fa-credit-card tab-icon"></i> <span>3) Finalizar Matrícula</span></a>
+                            </li>
+                        </ul>
+                        <br><br>
+                        <div class="progress progress_order" style="display: none;">
+                            <div class="progress-bar-indeterminate"></div>
+                        </div>
+                        <div id="student_financial">
+
+                            <form id="form_student_register_order" action="" method="post">
+                                <input type="hidden" name="user_buy" value="<?php echo $student->getHash(); ?>">
+                                <h5> Escolha o Curso </h5>
+                                <div id="clone" class="col-12">
+                                    <div class="row toclone">
+                                        <div class="col-md-8">
+                                            <div class="col-md-12 form-group form-group-default form-group-default-select2 required">
+                                                <label class="">EScolha Curso do Aluno</label>
+                                                <select class="full-width select2" data-placeholder="Curso do Aluno"
+                                                        data-init-plugin="select2" name="courses[]">
+                                                    <optgroup label="Escolha um Curso">
+
+														<?php foreach ($courses as $course) { ?>
+                                                            <option value="<?php echo $course->getHash(); ?>"
+                                                                    data-price="<?php echo $course->getType()->getPrice(); ?>"><?php echo $course->getFullNameCourse(); ?></option>
+														<?php } ?>
+
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 btns">
+                                            <div class="btn-group btn-group-justified row w-100">
+                                                <div class="btn-group col-6 p-0">
+                                                    <a type="button " class="btn btn-warning w-100 clone">
+                                                        <span class="p-t-5 p-b-5 text-black"> <i
+                                                                    class="fa fa-plus fs-15"></i></span>
+                                                        <br>
+                                                        <span class="fs-11 font-montserrat text-black text-uppercase">Adicionar</span>
+                                                    </a>
+                                                </div>
+                                                <div class="btn-group col-6 p-0">
+                                                    <a type="button " class="btn btn-danger w-100 delete">
+                                                        <span class="p-t-5 p-b-5 text-white"> <i
+                                                                    class="fa fa-remove fs-15"></i> </span>
+                                                        <br>
+                                                        <span class="fs-11 font-montserrat text-uppercase text-white">Remover</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h5> Financeiro </h5>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group form-group-default required">
+                                            <label>Desconto (%)</label>
+                                            <input type="text" class="form-control " required name="discount"
+                                                   value="0" data-mask="00.00" data-mask-reverse="true"
+                                                   data-auto-mask="true">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group form-group-default form-group-default-select2 required">
+                                            <label>Forma de Pagamento</label>
+                                            <select class="full-width select2" data-placeholder=" Método "
+                                                    data-init-plugin="select2" name="method">
+                                                <optgroup label="Escolha uma opção">
+                                                    <option value="99">Manual</option>
+                                                    <option value="1">Boleto Bradesco</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group form-group-default required">
+                                            <label>Parcelas</label>
+                                            <input type="text" class="form-control " required name="installments"
+                                                   maxlength="2" value="1">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group form-group-default required">
+                                            <label>Juros (%)</label>
+                                            <input type="text" class="form-control " required name="interest" value="0"
+                                                   placeholder="00.00" data-mask="00.00" data-mask-reverse="true">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <br><br>
+                                <p class="text-right">
+                                    <button type="button" id="submit_order" class="btn btn-info">
+                                        <span> Salvar Matrícula e Confirmar Informações</span>
+                                    </button>
+                                </p>
+                            </form>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ACESSOS -->
+            <div class="tab-pane" id="tab-6">
+                <div class="card card-default full-height" style="border: 0">
+                    <div class="card-header ">
+                        <div class="card-title">
+                            Acessos
+                            - <?php echo $student->getFirstName() . ' ' . $student->getLastName(); ?>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5>
+                            Lista de Acessos
+                        </h5>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="basicTable">
+                                <thead>
+                                <tr>
+                                    <th>Data - Hora</th>
+                                    <th></th>
+                                    <th>Local</th>
+                                    <th>IP</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+								<?php
+								if (count($student->getLogs()) > 0) {
+									foreach ($student->getLogs() as $log) { ?>
+
+                                        <tr class="text-sm-left ">
+                                            <td>
+												<?php echo $log->getCreatedAt()->format('d/m/Y H:i:s'); ?>
+                                            </td>
+                                            <td>
+												<?php echo $log->getBrowser(); ?>
+                                            </td>
+                                            <td>
+												<?php echo $log->getCity() . '-' . $log->getState() . ' | ' . $log->getCountry(); ?>
+                                            </td>
+                                            <td>
+												<?php echo $log->getIp(); ?>
+                                            </td>
+                                        </tr>
+
+									<?php }
+								} else { ?>
+
+                                    <tr>
+                                        <td colspan="7">
+                                            <h4 class="text-danger text-center"> Nenhum registro encontrado</h4>
+                                        </td>
+                                    </tr>
+
+								<?php } ?>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- CURSOS -->
+            <div class="tab-pane" id="tab-3">
+                <div class="card card-default full-height" style="border: 0">
+                    <div class="card-header ">
+                        <div class="card-title">
+                            Cursos Matriculados
+                            - <?php echo $student->getFirstName() . ' ' . $student->getLastName(); ?>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5>
+                            Lista de Cursos
+                        </h5>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="basicTable">
+                                <thead>
+                                <tr>
+                                    <th>Curso</th>
+                                    <th>Iniciado Em</th>
+                                    <th>Finalizado Em</th>
+                                    <th>Data da Matricula</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+								<?php
+								if (count($all_courses) > 0) {
+									foreach ($all_courses as $courses) { ?>
+
+                                        <tr>
+                                            <td class="v-align-middle ">
+                                                <p><?php echo $courses['item']; ?></p>
+                                                <small>prazo máximo em
+                                                    meses: <?php echo $courses['max_month']; ?></small>
+                                            </td>
+                                            <td class="v-align-middle">
+                                                <p><?php echo $courses['started'] == '' ? ' Não Iniciado ' : $courses['started']; ?></p>
+                                            </td>
+                                            <td class="v-align-middle">
+                                                <p><?php echo $courses['finished'] == '' ? ' Não Finalizado ' : $courses['finished']; ?></p>
+                                            </td>
+                                            <td class="v-align-middle">
+                                                <p><?php echo $courses['created']; ?></p>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-justified row w-100">
+                                                    <div class="btn-group col-4 p-0">
+                                                        <button type="button" class="btn btn-default w-100">
+                                                            <span class="p-t-5 p-b-5"> <i class="fa fa-star fs-15"></i></span>
+                                                            <br>
+                                                            <span class="fs-11 font-montserrat text-uppercase">Boletim</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="btn-group col-4 p-0">
+                                                        <button type="button" class="btn btn-default w-100">
+                                                                <span class="p-t-5 p-b-5"> <i
+                                                                            class="fa fa-history fs-15"></i> </span>
+                                                            <br>
+                                                            <span class="fs-11 font-montserrat text-uppercase">Alterar Prazos</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="btn-group col-4 p-0">
+                                                        <button type="button" class="btn btn-default w-100">
+                                                            <span class="p-t-5 p-b-5"> <i
+                                                                        class="fa fa-certificate fs-15"></i> </span>
+                                                            <br>
+                                                            <span class="fs-11 font-montserrat text-uppercase">Certificado</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+									<?php }
+								} else { ?>
+
+                                    <tr>
+                                        <td colspan="7">
+                                            <h4 class="text-danger text-center"> Nenhum registro encontrado</h4>
+                                        </td>
+                                    </tr>
+
+								<?php } ?>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- FINANCEIRO -->
+            <div class="tab-pane" id="tab-4">
+                <form id="form_student_financial" action="#" method="post">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- START card -->
+                            <div class="card card-default full-height" style="border: 0">
+                                <div class="card-header ">
+                                    <div class="card-title">
+                                        Financeiro
+                                        - <?php echo $student->getFirstName() . ' ' . $student->getLastName(); ?>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <h5>
+                                        Lista de Matrículas
+                                    </h5>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="basicTable">
+                                            <thead>
+                                            <tr>
+                                                <th>Colaborador</th>
+                                                <th>Valor Final/Parcelas</th>
+                                                <th>Desconto</th>
+                                                <th>Cursos</th>
+                                                <th>Status</th>
+                                                <th>Data do Registro</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+											<?php
+											if (count($student->getOrdersBuy()) > 0) {
+												foreach ($student->getOrdersBuy() as $r) { ?>
+
+                                                    <tr>
+                                                        <td class="v-align-middle ">
+                                                            <p><?php echo $r->getUserVendor()->getFirstName(); ?></p>
+                                                            <small>
+                                                                <strong>Origem: <?php echo $r->showPaymentType(); ?></strong>
+                                                            </small>
+                                                        </td>
+                                                        <td class="v-align-middle">
+                                                            <p>
+                                                                R$<?php echo number_format($r->getPriceFinal(), 2, ',', '.'); ?>
+                                                                (<?php echo $r->getInstallments(); ?>x)</p>
+                                                        </td>
+                                                        <td class="v-align-middle">
+                                                            <p>
+																<?php echo $r->getDiscount(); ?>%
+                                                            </p>
+                                                        </td>
+                                                        <td class="v-align-middle">
+                                                            <p><?php echo count($r->getOrderCourses()); ?></p>
+                                                        </td>
+                                                        <td class="v-align-middle">
+                                                            <p> <?php echo $r->showStatus(); ?> </p>
+                                                        </td>
+                                                        <td class="v-align-middle">
+                                                            <p><?php echo $r->getCreatedAt()->format('d/m/Y'); ?></p>
+                                                        </td>
+                                                        <td class="v-align-middle">
+															<?php if ($r->getStatus() != \App\Entity\School\Order\Order::ORDER_CANCELED) { ?>
+																<?php if ($r->getStatus() == \App\Entity\School\Order\Order::ORDER_PENDENT) { ?>
+                                                                    <a class="btn btn-default w-100"
+                                                                       onclick="openOrderPendent('<?php echo $r->getHash(); ?>')">
+                                                                        <span class="p-t-5 p-b-5 "> <i
+                                                                                    class="fa fa-info fs-15"></i> </span>
+                                                                        <br>
+                                                                        <span class="fs-11 font-montserrat text-uppercase">Detalhes</span>
+                                                                    </a>
+																<?php } else { ?>
+                                                                    <a href="<?php echo $route->pathFor('administrator.financial.order.view', ['hash' => $r->getHash()]); ?>"
+                                                                       class="btn btn-default w-100">
+                                                                        <span class="p-t-5 p-b-5 "> <i
+                                                                                    class="fa fa-info fs-15"></i> </span>
+                                                                        <br>
+                                                                        <span class="fs-11 font-montserrat text-uppercase">Detalhes</span>
+                                                                    </a>
+																<?php } ?>
+															<?php } ?>
+                                                        </td>
+                                                    </tr>
+
+												<?php }
+											} else { ?>
+
+                                                <tr>
+                                                    <td colspan="7">
+                                                        <h4 class="text-danger text-center"> Nenhum registro
+                                                            encontrado</h4>
+                                                    </td>
+                                                </tr>
+
+											<?php } ?>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- END card -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- DOCUMENTOS -->
+            <div class="tab-pane" id="tab-5">
+                <form id="form_student_financial" action="#" method="post">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- START card -->
+                            <div class="card card-default full-height" style="border: 0">
+                                <div class="card-header ">
+                                    <div class="card-title">
+                                        Documentos
+                                        - <?php echo $student->getFirstName() . ' ' . $student->getLastName(); ?>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+
+                                    <h5>Lista de Documentos</h5>
+									<?php
+
+									$d = [
+										['RG', 'Cópia Simples', 1],
+										['CPF', 'Cópia Simples', 2],
+										['Certidão de Nascimento/Casamento', 'Cópia Simples', 3],
+										['Titulo de Eletitor', 'Cópia Simples', 4],
+										['Comprovante de Residencia', 'Cópia Simples', 5],
+										['Foto 3x4', 'Cópia Simples', 6],
+										['Histórico Escolar', 'Cópia Autenticadas', 7],
+										['Diploma', 'Cópia Autenticadas', 8],
+										['Histórico Escolar', 'Cópia Autenticadas p/ 2a Licenciatura/R2', 9],
+										['Diploma', 'Cópia Autenticadas p/ 2a Licenciatura/R2', 10],
+										['Histórico Escolar Ensino Médio', 'Cópia Autenticadas p/ 2a Licenciatura/R2', 11],
+									]
+									?>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="basicTable">
+                                            <thead>
+                                            <tr>
+                                                <th>Documentos</th>
+                                                <th>Status</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+											<?php
+											$tt = 1;
+											$doc_ob = null;
+											foreach ($d as $dd => $doc) {
+												foreach ($student->getDocument() as $user_doc) {
+
+													$doc_ob = null;
+													if (is_object($user_doc))
+														if ($user_doc->getType() == $doc[2]) {
+															$doc_ob = $user_doc;
+															break;
+														}
+												}
+
+												?>
+                                                <tr>
+                                                    <td class="v-align-middle ">
+                                                        <p><?php echo $doc[0] ?></p>
+                                                        <small><?php echo $doc[1] ?></small>
+                                                    </td>
+                                                    <td class="v-align-middle">
+
+														<?php if (is_object($doc_ob)) { ?>
+
+															<?php if ($doc_ob->getStatus() == 1) { ?>
+                                                                <span class="label label-success">Enviado</span>
+															<?php } else { ?>
+                                                                <span class="label label-danger">Aguardando Reenvio</span>
+															<?php } ?>
+
+														<?php } else { ?>
+                                                            <span class="label label-warning">Aguardando Arquivo</span>
+														<?php } ?>
+
+                                                    </td>
+                                                    <td>
+														<?php if (is_object($doc_ob)) { ?>
+
+                                                            <div class="btn-group btn-group-justified row w-100">
+                                                                <div class="btn-group col-6 p-0">
+                                                                    <a href="<?php echo $route->pathFor('administrator.document.open', ['hash' => $doc_ob->getHash()]); ?>"
+                                                                       class="btn btn-default w-100" target="_blank">
+                                                                        <span class="p-t-5 p-b-5 "> <i
+                                                                                    class="fa fa-file fs-15"></i> </span>
+                                                                        <br>
+                                                                        <span class="fs-11 font-montserrat text-uppercase">Abrir</span>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="btn-group col-6 p-0">
+                                                                    <a href="<?php echo $route->pathFor('administrator.document.resend', ['hash' => $doc_ob->getHash()]); ?>"
+                                                                       class="btn btn-default w-100">
+                                                                        <span class="p-t-5 p-b-5"> <i
+                                                                                    class="fa fa-eraser fs-15"></i> </span>
+                                                                        <br>
+                                                                        <span class="fs-11 font-montserrat text-uppercase">Pedir para Reenviar</span>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+														<?php } ?>
+                                                    </td>
+                                                </tr>
+
+												<?php
+												$tt++;
+
+											} ?>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- END card -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}
+
+<script>
+
+    function openOrderPendent(hash) {
+        $('.progress_order').show();
+        $.get("<?php echo $route->pathFor('administrator.students.financial.confirm'); ?>/" + hash, function (html) {
+            $("#student_financial").html("");
+            $("#student_financial").html(html);
+
+            $('#order_step1').removeClass('active');
+            $('#order_step2').addClass('active');
+
+            $('#tab-4').removeClass('active');
+            $('#tab-2').addClass('active');
+
+            $('#nav-financial a').removeClass('active');
+            $('#nav-order a').addClass('active');
+
+            $('.progress_order').hide();
+        });
+    }
+
+    $(document).ready(function () {
+
+
+        $('#clone').cloneya({
+            serializeID: true,
+            cloneButton: '.btns .btn-group .btn-group .clone',
+            deleteButton: '.btns .btn-group .btn-group .delete'
+        })
+            .on('before_clone.cloneya', function (event, toClone, newClone) {
+                var $select = $('.select2').select2();
+                $select.each(function (i, item) {
+                    $(item).select2("destroy");
+                });
+            })
+            .on('after_append.cloneya', function (event, toClone, newClone) {
+                $('select').select2();
+            })
+        ;
+
+
+        $("#submit_order").click(function () {
+
+            $('.progress_order').show();
+            $.ajax({
+                method: "POST",
+                datType: 'JSONP',
+                url: "<?php echo $route->pathFor('administrator.students.financial.register'); ?>",
+                data: $("#form_student_register_order").serialize(),
+                success: function (data) {
+                    var obj = jQuery.parseJSON(data);
+                    if (!obj.error) {
+                        $.get("<?php echo $route->pathFor('administrator.students.financial.confirm'); ?>/" + obj.hash, function (html) {
+                            $("#student_financial").html("");
+                            $("#student_financial").html(html);
+                            $('#order_step1').removeClass('active');
+                            $('#order_step2').addClass('active');
+                            $('.progress_order').hide();
+                        });
+                    }
+                }
+            })
+
+        });
+
+
+        $("#form_student").validate();
+
+        $("html, body").animate({scrollTop: 0});
+        $('select').select2();
+    });
+</script>

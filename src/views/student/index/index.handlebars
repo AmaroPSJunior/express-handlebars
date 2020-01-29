@@ -1,0 +1,130 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+        <div class="container-fluid p-t-30 p-b-30 ">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="container-xs-height">
+                        <div class="row-xs-height">
+                            <div class="social-user-profile col-xs-height text-center col-top">
+                                <div class="thumbnail-wrapper d48 circular bordered b-white">
+                                    <img alt="Avatar" width="55" height="55"
+                                         data-src-retina="<?php echo $route->pathFor('profile.picture', ['hash' => $user->getHash()]); ?>"
+                                         data-src="<?php echo $route->pathFor('profile.picture', ['hash' => $user->getHash()]); ?>"
+                                         src="<?php echo $route->pathFor('profile.picture', ['hash' => $user->getHash()]); ?>">
+                                </div>
+                                <br>
+                                <i class="fa fa-check-circle text-success fs-16 m-t-10"></i>
+                            </div>
+                            <div class="col-xs-height p-l-20">
+                                <h3 class="no-margin p-b-5"><?php echo $user->getFirstName() . ' ' . $user->getLastName(); ?></h3>
+                                <p class="no-margin fs-16">Seja bem-vindo a plataforma EXATTO
+                                </p>
+                                <p class="hint-text m-t-5 small">Hoje <?php echo date('d/m/Y'); ?>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card card-default full-height">
+                    <div class="card-header ">
+                        <div class="card-title">Últimas Mensagens</div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <td><b>De</b></td>
+                                <td><b></b></td>
+                                <td><b>Mensagem</b></td>
+                                <td><b>Data</b></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="text-center text-danger" colspan="4"> Nenhuma mensagem nova</td>
+                            </tr>
+                            </tbody>
+                            <!--end::Tbody-->
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card card-default full-height">
+                    <div class="card-header">
+                        <div class="card-title">Últimos Acessos</div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <td><b>Data</b></td>
+                                <td><b></b></td>
+                                <td><b>Local</b></td>
+                                <td><b>Computador</b></td>
+                            </tr>
+                            </thead>
+                            <tbody>
+							<?php
+							$x = 1;
+							foreach ($user->getLogs() as $l) {
+								if ($x == 6) break; ?>
+                                <tr class="text-sm-left">
+                                    <td>
+										<?php echo $l->getCreatedAt()->format('d/m/Y H:i:s'); ?>
+                                    </td>
+                                    <td>
+										<?php echo $l->getBrowser(); ?>
+                                    </td>
+                                    <td>
+										<?php echo $l->getCity() . '-' . $l->getState() . ' | ' . $l->getCountry(); ?>
+                                    </td>
+                                    <td>
+										<?php echo $l->getIp(); ?>
+                                    </td>
+                                </tr>
+								<?php
+								$x++;
+							} ?>
+                            </tbody>
+                            <!--end::Tbody-->
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}

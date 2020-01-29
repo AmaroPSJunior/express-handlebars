@@ -1,0 +1,351 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Administrador</a></li>
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Cursos</a></li>
+                    <li class="breadcrumb-item"><a href="#">Formulário</a></li>
+                    <li class="breadcrumb-item active"><?php echo $course->getCourse(); ?></li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+
+		{{> flash_message}}
+
+        <ul class="nav nav-tabs nav-tabs-fillup" data-init-reponsive-tabs="dropdownfx">
+            <li class="nav-item">
+                <a href="#" class="active" data-toggle="tab"
+                   data-target="#tab-1"><span><?php echo $course->getCourse(); ?></span></a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="" data-toggle="tab" data-target="#tab-2"><span>Módulos Avulsos</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="" data-toggle="tab" data-target="#tab-3"><span>Núcleo Comum </span></a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+
+            <div class="tab-pane active" id="tab-1">
+                <form id="form_course"
+                      action="<?php echo $route->pathFor('administrator.courses.view', ['hash' => $course->getHash()]); ?>" enctype="multipart/form-data"
+                      method="post">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <!-- START card -->
+                            <div class="card card-default" style="border: 0">
+                                <div class="card-header ">
+                                    <div class="card-title">
+                                        Formulário de Curso - <?php echo $course->getCourse(); ?>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+
+                                    <h5>Curso</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default required">
+                                                <label>Curso</label>
+                                                <input type="text" class="form-control" required name="course"
+                                                       value="<?php echo $course->getCourse(); ?>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class=" form-group form-group-default form-group-default-select2 required">
+                                                <label class="">Tipo do Curso</label>
+                                                <select class="full-width" data-placeholder="tipo" name="type"
+                                                        data-init-plugin="select2">
+                                                    <optgroup label="Escolha um tipo">
+
+														<?php foreach ($types as $type) { ?>
+                                                            <option value="<?php echo $type->getHash(); ?>" <?php echo $type->getId() == $course->getType()->getId() ? 'selected' : ''; ?>><?php echo $type->getType(); ?>
+                                                                - <?php echo $type->getTime(); ?> horas
+                                                            </option>
+														<?php } ?>
+
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class=" form-group form-group-default form-group-default-select2 required">
+                                                <label class="">Categoria do Curso</label>
+                                                <select class="full-width" data-placeholder="categoria" name="category"
+                                                        data-init-plugin="select2">
+                                                    <optgroup label="Categoria do Curso">
+														<?php foreach ($categories as $category) { ?>
+                                                            <option value="<?php echo $category->getHash(); ?>" <?php echo $category->getId() == $course->getCategory()->getId() ? 'selected' : ''; ?>><?php echo $category->getCategory(); ?></option>
+														<?php } ?>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class=" form-group form-group-default form-group-default-select2 required">
+                                                <label class="">Status</label>
+                                                <select class="full-width" data-placeholder="status" name="status"
+                                                        data-init-plugin="select2">
+                                                    <optgroup label="Status do Curso">
+                                                        <option value="1" <?php echo 1 == $course->getStatus() ? 'selected' : ''; ?>>
+                                                            Ativo
+                                                        </option>
+                                                        <option value="2" <?php echo 2 == $course->getStatus() ? 'selected' : ''; ?>>
+                                                            Inativo
+                                                        </option>
+                                                        <option value="3" <?php echo 3 == $course->getStatus() ? 'selected' : ''; ?>>
+                                                            Cancelado
+                                                        </option>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class=" form-group form-group-default form-group-default-select2 required">
+                                                <label class="">Tutor Responsável</label>
+                                                <select class="full-width"
+                                                        data-placeholder="Escolha um Tutor Responsável" name="academic"
+                                                        data-init-plugin="select2">
+                                                    <optgroup label="Tutor Reponsável">
+														<?php foreach ($academics as $academic) { ?>
+                                                            <option value="<?php echo $academic->getHash(); ?>" <?php echo ((is_object($academic->getId())) && $academic->getId() == $course->getUserTutor()->getId()) ? 'selected' : ''; ?>><?php echo $academic->getName(); ?></option>
+														<?php } ?>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                            <small>* caso não tenha um responsável, será mostrado para o aluno como
+                                                'Equipe Exatto Educacional'
+                                            </small>
+                                        </div>
+                                        <div class="col-md-6">
+											<?php if ($course->getThumb() != null) { ?>
+
+                                                <img src="<?php echo $route->pathFor('course.thumb', ['hash' => $course->getHash()]); ?>" width="140">
+                                                <br>
+                                                <input type="checkbox" name="excluir_thumb" value="excluir"> Excluir Capa
+
+											<?php } else { ?>
+
+                                                <div class=" form-group form-group-default ">
+                                                    <label>Capa do Curso</label>
+                                                    <input name="thumb" type="file" class="form-control">
+                                                </div>
+
+											<?php } ?>
+                                        </div>
+                                    </div>
+
+                                    <br><br>
+
+                                    <p class="text-right">
+                                        <button type="submit" class="btn btn-info">
+                                            <span>Salvar Curso e Continuar</span>
+                                        </button>
+                                    </p>
+
+
+                                </div>
+
+                            </div>
+                            <!-- END card -->
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="tab-pane " id="tab-2">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- START card -->
+                        <div class="card card-default" style="border: 0">
+                            <div class="card-header ">
+                                <div class="card-title">
+                                    Lista de Módulos do curso - <?php echo $course->getCourse(); ?>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5>Escolha um módulo</h5>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-8 col-lg-8 form-group form-group-default form-group-default-select2">
+                                            <label>Nome do Módulo</label>
+                                            <select id="select_modules" class="full-width select2"
+                                                    data-placeholder="Escolha um Módulo"
+                                                    name="modules">
+                                                <option value="" selected> ---</option>
+                                                <optgroup label="Módulo">
+													<?php foreach ($modules as $module) { ?>
+                                                        <option value="<?php echo $module->getHash(); ?>"><?php echo mb_strtoupper($module->getModule()); ?></option>
+													<?php } ?>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 col-lg-4 ">
+                                            <div class="btn-group btn-group-justified row w-100 p-l-10">
+                                                <div class="btn-group col-4 p-0">
+                                                    <button type="button" class="btn btn-warning w-100" id="add_module">
+                                                        <span class="p-t-5 p-b-5 text-black"> <i
+                                                                    class="fa fa-plus fs-15"></i></span>
+                                                        <br>
+                                                        <span class="fs-11 font-montserrat text-black text-uppercase">Adicionar</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <br>
+                                <h5>Lista de Módulos</h5>
+                                <div class="progress progress_list">
+                                    <div class="progress-bar-indeterminate"></div>
+                                </div>
+                                <div id="list_modules"></div>
+                            </div>
+
+                        </div>
+                        <!-- END card -->
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="tab-pane " id="tab-3">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- START card -->
+                        <div class="card card-default" style="border: 0">
+                            <div class="card-header ">
+                                <div class="card-title">
+                                    Lista de Módulos do Núcle Comum - <?php echo $course->getCourse(); ?>
+                                </div>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="basicTable">
+                                        <thead>
+                                        <tr>
+                                            <th width="80">#</th>
+                                            <th>Módulo</th>
+                                            <th>Conteúdos</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+										<?php
+										$x = 0;
+										foreach ($course->getType()->getModules() as $module) {
+											$x++;
+											?>
+                                            <tr>
+                                                <td class="v-align-middle ">
+                                                    <p><?php echo $x; ?></p>
+                                                </td>
+                                                <td class="v-align-middle">
+                                                    <p><?php echo $module->getModule(); ?></p>
+                                                </td>
+                                                <td class="v-align-middle">
+                                                    <p><?php echo $module->getTotalChapters(); ?></p>
+                                                </td>
+                                            </tr>
+										<?php } ?>
+										<?php
+										if ($x == 0) {
+											?>
+                                            <tr>
+                                                <td colspan="7">
+                                                    <h4 class="text-danger text-center"> Nenhum registro encontrado</h4>
+                                                </td>
+                                            </tr>
+										<?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- END card -->
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}
+
+
+<script>
+    $('#clone').cloneya({
+        serializeID: true,
+        cloneButton: '.btns .btn-group .btn-group .clone',
+        deleteButton: '.btns .btn-group .btn-group .delete'
+    });
+    $('#clone2').cloneya({
+        serializeID: true,
+        cloneButton: '.btns .btn-group .btn-group .clone',
+        deleteButton: '.btns .btn-group .btn-group .delete'
+    });
+
+    $("#form_course").validate();
+
+    function list() {
+        $('.progress_list').show();
+        $.ajax({
+            method: "GET",
+            url: "<?php echo $route->pathFor('administrator.courses.get.module', ['hash' => $course->getHash()]);?>"
+        })
+            .done(function (html) {
+                $('.progress_list').hide();
+                $("#list_modules").html(html);
+            });
+    }
+
+    $(document).ready(function () {
+        list();
+        $('#select_modules').select2({
+            "language": {
+                "noResults": function () {
+                    return "Nenhum módulo encontrado - <a href='<?php echo $route->pathFor('administrator.modules.record');?>' class='btn btn-primary'> Cadastrar Novo</a>";
+                }
+            },
+            escapeMarkup: function (markup) {
+                return markup;
+            }
+        })
+        $('#add_module').click(function () {
+            var url = "<?php echo $route->pathFor('administrator.modules.add.course', ['hash' => 'hash_module', 'hash_course' => 'hash_course']);?>";
+            var url_final = url.replace("hash_module", $('.select2 option:selected').val());
+            var url_final2 = url_final.replace("hash_course", "<?php echo $course->getHash(); ?>");
+            $.get(url_final2, function () {
+                list();
+            })
+        })
+    })
+</script>

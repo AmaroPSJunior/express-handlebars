@@ -1,0 +1,176 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Administrador</a></li>
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Financeiro</a></li>
+                    <li class="breadcrumb-item"><a href="#">Matrícula</a></li>
+                    <li class="breadcrumb-item active"><?php echo $order->getHash(); ?></li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+		{{> flash_message}}
+
+
+
+        <!-- START card -->
+        <div class="card card-default full-height">
+            <div class="card-header ">
+                <div class="card-title">
+                    Dados da Matrícula
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="row b-a b-grey no-margin">
+                    <div class="col-md-3 p-l-10 sm-padding-15 align-items-center d-flex">
+                        <div>
+                            <h5 class="font-montserrat all-caps small no-margin hint-text bold">Matrícula</h5>
+                            <p class="no-margin"><?php echo $order->getHash(); ?></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 p-l-10 sm-padding-15 align-items-center d-flex">
+                        <div>
+                            <h5 class="font-montserrat all-caps small no-margin hint-text bold">Status</h5>
+                            <p class="no-margin"><?php echo $order->showStatus(); ?></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 p-l-10 sm-padding-15 align-items-center d-flex">
+                        <div>
+                            <h5 class="font-montserrat all-caps small no-margin hint-text bold">Desconto</h5>
+                            <p class="no-margin"><?php echo $order->getDiscount(); ?>%</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 p-l-10 sm-padding-15 align-items-center d-flex">
+                        <div>
+                            <h5 class="font-montserrat all-caps small no-margin hint-text bold">Juros</h5>
+                            <p class="no-margin"><?php echo $order->getInterest(); ?>%</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 text-right bg-primary padding-10">
+                        <h5 class="font-montserrat all-caps small no-margin hint-text text-white bold"> Valor Final</h5>
+                        <h4 class="no-margin text-white">R$ <?php echo number_format($order->getPriceFinal(), 2, ',', '.'); ?></h4></h4>
+                    </div>
+                </div>
+                <br>
+                <div class="row b-a b-grey no-margin">
+                    <div class="col-md-6  padding-10">
+                        <h5 class="font-montserrat all-caps small no-margin hint-text bold"> ALuno</h5>
+                        <h4 class="no-margin"><?php echo $order->getUserBuy()->getName(); ?> <a href="<?php echo $route->pathFor('administrator.students.view', ['hash' => $order->getUserBuy()->getHash()]); ?>" class="btn btn-primary"> <i class="fa fa-user"></i> Dados do Aluno </a></h4>
+                    </div>
+                    <div class="col-md-3 padding-10 p-l-10 sm-padding-15 align-items-center d-flex">
+                        <div>
+                            <h5 class="font-montserrat all-caps small no-margin hint-text bold">Contato</h5>
+                            <p class="no-margin"><?php echo $order->getUserBuy()->getEmail(); ?></p>
+                            <p class="no-margin"><?php echo $order->getUserBuy()->getPhone(); ?></p>
+                            <p class="no-margin"><?php echo $order->getUserBuy()->getCellPhone(); ?></p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 padding-10 p-l-10 sm-padding-15 align-items-center d-flex">
+                        <div>
+                            <h5 class="font-montserrat all-caps small no-margin hint-text bold">Endereço</h5>
+                            <p class="no-margin">
+								<?php echo $order->getUserBuy()->getAddress()->getAddress(); ?>, <?php echo $order->getUserBuy()->getAddress()->getNumber(); ?> <?php echo $order->getUserBuy()->getAddress()->getComplement(); ?> - <?php echo $order->getUserBuy()->getAddress()->getDistrict(); ?>
+                                <br>
+								<?php echo $order->getUserBuy()->getAddress()->getCity(); ?> - <?php echo $order->getUserBuy()->getAddress()->getState(); ?>
+                                <br>
+								<?php echo $order->getUserBuy()->getAddress()->getZip(); ?>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="col-md-12">
+                    <h5>Lista de parcelas na Matrícula</h5>
+                    <table class="table table-condensed">
+                        <tbody>
+                        <thead>
+                        <th width="150px">Parcela</th>
+                        <th>Vencimento</th>
+                        <th>Status</th>
+                        <th class="text-right">Valor</th>
+                        </thead>
+						<?php foreach ($order->getInstallmentDue() as $item) { ?>
+                            <tr>
+                                <td class=" text-left">
+                                    <span>
+                                        <?php echo $item->getInstallments(); ?>
+                                    </span>
+                                </td>
+                                <td class=" text-left">
+                                    <span>
+                                        <?php echo $item->getFinishedIn()->format('d/m/Y'); ?>
+                                    </span>
+                                </td>
+                                <td class=" text-left">
+                                    <span>
+                                        <?php echo $item->showStatus(); ?>
+                                    </span>
+                                    <?php if($item->getStatus() == \App\Entity\School\Order\OrderInstallment::INSTALLMENT_RELEASED){ ?>
+                                        - <a href="<?php echo $item->getFile(); ?>" target="_blank" class="btn btn-secondary"> Abrir Boleto </a>
+                                    <?php } ?>
+                                </td>
+                                <td class="  text-right">
+                                    <h4 class="text-primary no-margin">
+                                        R$ <?php echo number_format($item->getPrice(), 2, ',', '.'); ?>
+                                    </h4>
+                                </td>
+                            </tr>
+
+						<?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+                <br><br>
+                <div class="col-md-12">
+                    <h5>Lista de cursos incluso na Matrícula</h5>
+                    <table class="table table-condensed">
+                        <tbody>
+                        <thead>
+                        <th>Curso</th>
+                        <th class="text-right">Valor</th>
+                        </thead>
+						<?php foreach ($order->getOrderCourses() as $cours) { ?>
+                            <tr>
+                                <td class=" col-lg-2 col-md-3 col-sm-3 text-left">
+								<span>
+									<?php echo $cours->getCourses()->getFullNameCourse(); ?>
+								</span>
+                                </td>
+                                <td class=" col-lg-2 col-md-3 col-sm-2 text-right">
+                                    <h4 class="text-primary no-margin">
+                                        R$ <?php echo number_format($cours->getCourses()->getType()->getPrice(), 2, ',', '.'); ?>
+                                    </h4>
+                                </td>
+                            </tr>
+
+						<?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        <!-- END card -->
+
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}

@@ -1,0 +1,110 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Administrador</a></li>
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Atividades</a></li>
+                    <li class="breadcrumb-item active">Listagem Geral</li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <h3>
+                            <span class="semi-bold"><?php echo $activities?></span> atividade ativos</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <h3>
+                            <span class="semi-bold"><?php echo $activities?></span> atividade inativos</h3>
+                    </div>
+                </div>
+            </div>
+            <a href="" class="col-lg-4">
+                <div class="card card-default bg-info-dark">
+                    <div class="card-body">
+                        <h3 class=" text-white">+ Atividade</h3>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+
+
+        <form id="form_search" role="form">
+            <div class="form-group form-group-default required ">
+                <label>Pesquisar</label>
+                <input id="input-search" type="text" class="form-control" required="" name="search">
+            </div>
+            <div class="progress">
+                <div class="progress-bar-indeterminate"></div>
+            </div>
+        </form>
+
+        <div class="card card-transparent">
+            <div class="card-header ">
+                <div class="card-title">Listagem Geral de Atividades
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div id="result_activities">
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}
+
+<script>
+
+    function g() {
+        $('.progress').show();
+        $.ajax({
+            method: "POST",
+            url: "<?php echo $route->pathFor('administrator.activities.search');?>",
+            data: $('#form_search').serialize()
+        })
+            .done(function (html) {
+                $('.progress').hide();
+                $("#result_activities").html(html);
+            });
+    }
+
+    $(document).ready(function () {
+
+        $('#input-search').terminadedigitar(function () {
+            g();
+        }, 500);
+
+    })
+
+    g();
+
+
+</script>
+

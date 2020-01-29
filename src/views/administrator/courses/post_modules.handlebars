@@ -1,0 +1,175 @@
+
+{{> flash_message}}
+
+<div class="tab-pane " id="tab-3">
+    <form id="form_module" enctype="multipart/form-data">
+        <div class="row">
+            <input type="hidden" name="hash_course" value="<?php echo $course->getHash(); ?>">
+            <input type="hidden" name="hash_module" value="<?php echo is_object($module) ? $module->getHash() : ''; ?>">
+            <!-- START card -->
+            <div class="card card-default" style="border: 0">
+
+                <div class="card-body">
+
+                    <div class="col-md-12 form-group form-group-default required pl-2">
+                        <label>Nome do Módulo</label>
+                        <input name="module" type="text" class="form-control input-module" required
+                               value="<?php echo is_object($module) ? $module->getModule() : ''; ?>">
+                    </div>
+
+                    <br>
+
+                    <div id="clone2" class="col-12">
+						<?php
+						if (is_object($module)) {
+							if (count($module->getChapters()) > 0) {
+								foreach ($module->getChapters() as $chapter) {
+									if ($chapter->getStatus() == 1) { ?>
+                                        <div class="row toclone ">
+                                            <div class="col-md-4 form-group form-group-default pl-2">
+                                                <label> Referência do arquivo </label>
+                                                <input name="modules[<?php echo $module->getHash(); ?>][chapter][<?php echo $chapter->getHash() ?>]"
+                                                       type="hidden" class="form-control"
+                                                       value="<?php echo $chapter->getChapter() ?>">
+                                                <strong><?php echo $chapter->getChapter() == '' ? 'Nenhum arquivo enviado' : $chapter->getChapter(); ?></strong>
+                                            </div>
+                                            <div class="col-md-3 form-group form-group-default">
+                                                <label>Anexar Conteúdo</label>
+                                                <input name="modules[<?php echo $module->getHash(); ?>][content][<?php echo $chapter->getHash() ?>]"
+                                                       type="file" class="form-control">
+                                            </div>
+                                            <div class="col-md-5 btns">
+                                                <div class="btn-group btn-group-justified row w-100">
+                                                    <div class="btn-group col-4 p-0">
+                                                        <a type="button "
+                                                           class="btn btn-danger w-100 delete">
+                                                            <span class="p-t-5 p-b-5 text-white"> <i
+                                                                        class="fa fa-remove fs-15"></i> </span>
+                                                            <br>
+                                                            <span class="fs-11 font-montserrat text-white text-uppercase">Remover</span>
+                                                        </a>
+                                                    </div>
+
+													<?php
+													$path = __DIR__ . '/../../../../../upload/client/exatto/content/' . $course->getHash() . '/' . $chapter->getContent();
+													if (file_exists($path)) {
+														$type = pathinfo($path, PATHINFO_EXTENSION);
+														$data = file_get_contents($path);
+														if ($type == 'pdf') {
+															?>
+                                                            <div class="btn-group col-4 p-0">
+                                                                <a href="<?php echo $route->pathFor('content.chapter', ['hash' => $chapter->getHash()]); ?>"
+                                                                   target="_blank"
+                                                                   class="btn btn-info w-100">
+                                                                                    <span class="p-t-5 p-b-5 text-white"> <i
+                                                                                                class="fa fa-file fs-15"></i> </span>
+                                                                    <br>
+                                                                    <span class="fs-11 font-montserrat text-white text-uppercase">Ver Conteudo</span>
+                                                                </a>
+                                                            </div>
+														<?php }
+													} ?>
+
+                                                    <div class="btn-group col-4 p-0">
+                                                        <a href="<?php echo $route->pathFor('administrator.activities.chapter', ['hash' => $chapter->getHash()]); ?>"
+                                                           class="btn btn-primary w-100">
+                                                                            <span class="p-t-5 p-b-5 text-white"> <i
+                                                                                        class="fa fa-pencil-square fs-15"></i> </span>
+                                                            <br>
+                                                            <span class="fs-11 font-montserrat text-white text-uppercase">Atividades</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+									<?php }
+								}
+							}
+						}
+						?>
+
+                        <div class="row toclone ">
+                            <div class="col-md-4 form-group form-group-default pl-2">
+                                <label> Referência do arquivo </label>
+                                <input name="modules[][chapter][]" type="hidden" class="form-control" value="">
+                                Nenhum arquivo enviado
+                            </div>
+                            <div class="col-md-3 form-group form-group-default">
+                                <label>Anexar Conteúdo</label>
+                                <input name="modules[][content][]" type="file" class="form-control">
+                            </div>
+                            <div class="col-md-5 btns">
+                                <div class="btn-group btn-group-justified row w-100">
+                                    <div class="btn-group col-4 p-0">
+                                        <a type="button " class="btn btn-warning w-100 clone">
+                                            <span class="p-t-5 p-b-5 text-black"> <i
+                                                        class="fa fa-plus fs-15"></i></span>
+                                            <br>
+                                            <span class="fs-11 font-montserrat text-black text-uppercase">Adicionar</span>
+                                        </a>
+                                    </div>
+                                    <div class="btn-group col-4 p-0">
+                                        <a type="button " class="btn btn-danger w-100 delete">
+                                            <span class="p-t-5 p-b-5 text-white"> <i
+                                                        class="fa fa-remove fs-15"></i> </span>
+                                            <br>
+                                            <span class="fs-11 font-montserrat text-uppercase text-white">Remover</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <br><br>
+
+                    <p class="text-right">
+                        <button type="button" id="submit_module" class="btn btn-info">
+                            <span>Salvar Informações do Módulo</span>
+                        </button>
+                    </p>
+                </div>
+
+            </div>
+            <!-- END card -->
+
+        </div>
+    </form>
+</div>
+
+<script>
+
+    $('#clone2').cloneya({
+        serializeID: true,
+        cloneButton: '.btns .btn-group .btn-group .clone',
+        deleteButton: '.btns .btn-group .btn-group .delete'
+    });
+
+    $("#submit_module").click(function () {
+
+        var formattr = $("#form_module")[0];
+        var data = new FormData(formattr);
+
+        $.ajax({
+            method: "POST",
+            url: "<?php echo $route->pathFor('administrator.courses.post.two.module', ['hash' => $course->getHash()]); ?>",
+            data: data,
+            dataType: 'JSON',
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                if(data.error){
+                    form(data.hash)
+                    return;
+                }
+                list();
+                form(data.hash);
+            },
+            error: function () {
+
+            }
+        })
+
+    });
+</script>

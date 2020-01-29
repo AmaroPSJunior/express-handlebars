@@ -1,0 +1,109 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Administrador</a></li>
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Comercial</a></li>
+                    <li class="breadcrumb-item"><a href="#">Vendedor</a></li>
+                    <li class="breadcrumb-item active">Listagem Geral</li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+        {{> flash_message}}
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <h3>
+                            <span class="semi-bold"><?php echo $active; ?></span> vendedor(es) ativo(s)</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <h3>
+                            <span class="semi-bold"><?php echo $inactive; ?></span> vendedor(es) inativo(s)</h3>
+                    </div>
+                </div>
+            </div>
+            <a href="<?php echo $route->pathFor('administrator.commercial.sellers.record'); ?>" class="col-lg-4">
+                <button class="btn btn-lg btn-secondary btn-block padding-20 btn-primary"> <h4 class="text-white"><strong>+ Vendedor</strong> </h4></button>
+            </a>
+
+        </div>
+
+        <form id="form_search" class="" role="form">
+            <div class="form-group form-group-default required ">
+                <label>Pequisar</label>
+                <input id="input-search" name="search" type="email" class="form-control" required="">
+            </div>
+
+            <div class="progress">
+                <div class="progress-bar-indeterminate"></div>
+            </div>
+        </form>
+
+        <div class="card card-transparent">
+            <div class="card-header ">
+                <div class="card-title">Listagem Geral de Vendedores
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div id="result_commercial">
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}
+
+<script>
+
+    function g() {
+        $('.progress').show();
+        $.ajax({
+            method: "POST",
+            url: "<?php echo $route->pathFor('administrator.commercial.sellers.search');?>",
+            data: $('#form_search').serialize()
+        })
+            .done(function (html) {
+                $('.progress').hide();
+                $("#result_commercial").html(html);
+            });
+    }
+
+    $(document).ready(function () {
+
+        $('#input-search').terminadedigitar(function () {
+            g();
+        }, 500);
+
+    })
+
+    g();
+
+
+</script>
+

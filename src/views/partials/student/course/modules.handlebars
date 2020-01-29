@@ -1,0 +1,291 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid   container-fixed-lg">
+            <div class="inner" style="transform: translateY(0px); opacity: 1;">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Meus Cursos</a></li>
+                    <li class="breadcrumb-item active"><?php echo $course->getCourse(); ?></li>
+                </ol>
+                <!-- END BREADCRUMB -->
+                <div class="row m-0">
+                    <div class="col-xl-8 col-lg-8">
+                        <!-- START card -->
+                        <div class="card card-transparent">
+                            <div class="card-body">
+                                <h3><?php echo $course->getCourse(); ?></h3>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <!-- START card -->
+                                        <div class="card card-transparent">
+                                            <div class="card-header ">
+                                                <div class="card-title">Informações</div>
+                                            </div>
+                                            <div class="card-body">
+                                                <p>
+                                                    Início: <?php echo $order_course->getStartedAt()->format('d/m/Y'); ?> </p>
+                                                <p>
+                                                    Término: <?php echo (!is_null($order_course->getFinishedAt())) ? $order_course->getFinishedAt()->format('d/m/Y') : ' -- '; ?> </p>
+                                            </div>
+                                        </div>
+                                        <!-- END card -->
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card-header ">
+                                            <div class="card-title">Tutor Responsável</div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="profile-img-wrapper m-t-5 inline">
+                                                <img width="35" height="35" src="/client/demos/user.png"
+                                                     alt="Avatar"
+                                                     data-src="/client/demos/user.png"
+                                                     data-src-retina="/client/demos/user.png">
+                                            </div>
+                                            <div class="inline m-l-10">
+												<?php if (is_object($course->getUserTutor())) { ?>
+                                                    <p class="p-t-10"><?php echo $course->getUserTutor()->getName(); ?> </p>
+												<?php } else { ?>
+                                                    <p class="p-t-10">Equipe Exatto Educacional </p>
+												<?php } ?>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <!-- START card -->
+                                        <div class="card card-transparent">
+                                            <div class="card-header ">
+                                                <div class="card-title">Notas</div>
+                                            </div>
+                                            <div class="card-body">
+                                                <a data-href="#" class="btn btn-secondary w-100 btn-notes">
+                                                    <span class="p-t-5 p-b-5 "> <i class="fa fa-star fs-15"></i> </span>
+                                                    <br>
+                                                    <span class="fs-11 font-montserrat text-uppercase">Boletim</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!-- END card -->
+                                    </div>
+                                    <div class="col-md-4">
+                                        <!-- START card -->
+                                        <div class="card card-transparent">
+                                            <div class="card-header ">
+                                                <div class="card-title">Certificado</div>
+                                            </div>
+                                            <div class="card-body">
+                                                <a data-href="#"
+                                                   class="btn btn-secondary w-100 btn-certificate">
+                                                    <span class="p-t-5 p-b-5 "> <i class="fa fa-certificate fs-15"></i> </span>
+                                                    <br>
+                                                    <span class="fs-11 font-montserrat text-uppercase">Certificado</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!-- END card -->
+                                    </div>
+                                    <div class="col-md-4">
+                                        <!-- START card -->
+                                        <div class="card card-transparent">
+                                            <div class="card-header ">
+                                                <div class="card-title">Tutoria</div>
+                                            </div>
+                                            <div class="card-body">
+                                                <a data-href="#"
+                                                   class="btn btn-secondary w-100">
+                                                    <span class="p-t-5 p-b-5 "> <i
+                                                                class="fa fa-question fs-15"></i> </span>
+                                                    <br>
+                                                    <span class="fs-11 font-montserrat text-uppercase">Dúvidas</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!-- END card -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END card -->
+                    </div>
+                    <div class="col-xl-4 col-lg-4 d-none d-lg-block">
+                        <!-- START card -->
+						<?php if ($course->getThumb() != null) { ?>
+                            <img src="<?php echo $route->pathFor('course.thumb', ['hash' => $course->getHash()]); ?>" width="400">
+						<?php } else { ?>
+                            <img src="/client/demos/thumb_course.jpg" width="400">
+						<?php } ?>
+                        <!-- END card -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+
+	<?php if (is_null($order_course->getFinishedAt())){  ?>
+
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+		{{> flash_message}}
+
+        <div class="card card-default full-height" style="border: 0">
+
+            <div class="card-body">
+                <div class="sm-m-l-5 sm-m-r-5">
+                    <div class="card-group horizontal" id="accordion" role="tablist" aria-multiselectable="true">
+						<?php
+						if (count($course->getModules()) > 0) {
+							foreach ($course->getModules() as $module) { ?>
+
+                                <div class="card card-default m-b-0 ">
+                                    <div class="card-header " role="tab" id="heading<?php echo $module->getHash(); ?>">
+                                        <h4 class="card-title">
+                                            <a data-toggle="collapse" data-parent="#accordion"
+                                               href="#collapse<?php echo $module->getHash(); ?>" aria-expanded="true"
+                                               aria-controls="collapseOne"> Módulo - <?php echo $module->getModule() ?>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse<?php echo $module->getHash(); ?>" class="collapse" role="tabcard"
+                                         aria-labelledby="heading<?php echo $module->getHash(); ?>">
+                                        <div class="card-body">
+                                            <table class="table table-hover" id="basicTable">
+                                                <thead>
+                                                <tr>
+                                                    <th width="50%"></th>
+                                                    <th></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+												<?php
+												if (count($module->getChapters()) > 0) {
+													foreach ($module->getChapters() as $chapter) { ?>
+                                                        <tr>
+                                                            <td>
+                                                                <p><?php echo $chapter->getChapter(); ?></p>
+                                                            </td>
+                                                            <td>
+                                                                <a href="<?php echo $route->pathFor('student.courses.modules.content', ['hash' => $module->getHash(), 'content' => $chapter->getHash()]); ?>" class="btn btn-default " target="_blank">
+                                                                    <i class="fa fa-file fs-15"></i> Abrir Conteúdo
+                                                                </a>
+                                                                <a href="<?php echo $route->pathFor('student.forum.send', ['hash_course_module_chapter' => $chapter->getHash()]); ?>" class="btn btn-default">
+                                                                    <i class="fa fa-question fs-15"></i>  Dúvidas
+                                                                </a>
+
+                                                                <?php if (is_object($chapter->getActivities())) { ?>
+
+                                                                    <a data-href="<?php echo $route->pathFor('student.activities.questions', ['hash' => $chapter->getActivities()->getHash(), 'hash_order_course' => $order_course->getHash()]) ?>"
+                                                                       class="btn btn-default btn-start-activity">
+                                                                        <i class="fa fa-pencil-square fs-15"></i> Atividades
+                                                                    </a>
+
+                                                                <?php } ?>
+
+                                                            </td>
+                                                        </tr>
+														<?php
+													}
+												} else { ?>
+                                                    <tr>
+                                                        <th colspan="2" class="text-center"> Nenhum conteúdo encontrado
+                                                            para esse módulo até o momento.
+                                                        </th>
+                                                    </tr>
+												<?php } ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+								<?php
+							}
+						} ?>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+
+	<?php }else{ ?>
+
+        <h3 class="text-center"> Curso finalizado em <?php echo $order_course->getFinishedAt()->format('d/m/Y'); ?></h3>
+
+    <?php }?>
+
+</div>
+
+{{> f}}
+
+<div class="modal fade fill-in" id="modalNotes" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="progress progress_note">
+                <div class="progress-bar-indeterminate"></div>
+            </div>
+            <div id="result_notes"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('.btn-start-activity').click(function () {
+            var data_url = $(this).attr('data-href');
+
+            Swal.fire({
+                title: 'Segue  a  correção sobre o alerta da avaliação!',
+                html: "O estudo das apostilas é primordial para seu sucesso !A Média mínima para aprovação é 7 (sete). <br><br>" +
+                    "Você terá três chances consecutivas para realizar  a avaliação.  Será liberada nova tentativa somente para os alunos que não alcançaram a média 7.(sete). O gabarito não será disponibilizado e não poderemos lhe informar qual a atividade correta. <br><br>" +
+                    "Caso tenha se esgotado suas chances, enviar solicitação para o tutor justificando o motivo de sua dificuldade, a mesmo entrará em contato.",
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Continuar',
+                cancelButtonText: 'Fechar',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    document.location.href = data_url;
+                }
+            })
+
+        })
+
+        $('.btn-certificate').click(function () {
+            Swal.fire({
+                type: 'info',
+                title: 'Atenção!',
+                text: 'Certificado disponível após o termino do curso'
+            });
+        })
+
+        $('.btn-notes').click(function(){
+            $('.progress_note').show();
+            $('#modalNotes').modal('show');
+            $('#result_notes').html("");
+            $.ajax({
+                method: "GET",
+                url: "<?php echo $route->pathFor('student.courses.notes', ['hash' => $course->getHash(), 'hash_order_course' => $order_course->getHash()]); ?>",
+                success: function (html) {
+                    $('#result_notes').html(html);
+                    $('.progress_note').hide();
+                }
+            })
+        })
+
+    })
+</script>

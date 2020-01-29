@@ -1,0 +1,104 @@
+{{> flash_message}}
+
+
+<div class="table-responsive">
+    <table class="table table-hover" id="basicTable">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Enunciado</th>
+            <th>Repostas</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+
+		<?php
+		if (count($result->getQuestions()) > 0) {
+			$x = 0;
+			foreach ($result->getQuestions() as $r) {
+				if (is_null($r->getDeletedAt())) {
+					$x++;
+					?>
+
+                    <tr>
+                        <td class="v-align-middle ">
+                            <p><?php echo $x; ?></p>
+                        </td>
+                        <td class="v-align-middle small">
+							<?php echo $r->getQuestion(); ?>
+                        </td>
+                        <td class="v-align-middle">
+                            <p><?php echo count($r->getAnswers()); ?></p>
+                        </td>
+                        <td class="v-align-middle">
+
+                            <div class="btn-group">
+                                <a class="btn btn-secondary" onclick="return form('<?php echo $r->getHash(); ?>');">
+                                    editar </a>
+                                <button type="button"
+                                        data-href="<?php echo $route->pathFor('administrator.activities.question.delete', ['hash' => $r->getHash()]); ?>"
+                                        class="btn btn-danger delete_question">excluir
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+				<?php }
+			} ?>
+
+			<?php
+		} ?>
+
+        <?php if($x==0){ ?>
+            <tr>
+                <td colspan="7">
+                    <h4 class="text-danger text-center"> Nenhum registro encontrado</h4>
+                </td>
+            </tr>
+		<?php } ?>
+
+        <tr>
+            <td class="v-align-middle"></td>
+            <td class="v-align-middle small"></td>
+            <td class="v-align-middle"></td>
+            <td class="v-align-middle">
+                <a class="btn btn-secondary btn-cons btn-sm" onclick="return form();"> nova questão </a>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('.delete_question').click(function () {
+            var data_url = $(this).attr('data-href');
+
+            Swal.fire({
+                title: 'Deseja mesmo exluir a questão?',
+                type: 'error',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim!',
+                cancelButtonText: 'Cancelar',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+
+                    return fetch(data_url).then(response => {
+                        location.reload(true)
+                    }).catch(error => {
+                        location.reload(true)
+                    })
+
+                }
+            })
+
+        })
+
+    })
+</script>
+

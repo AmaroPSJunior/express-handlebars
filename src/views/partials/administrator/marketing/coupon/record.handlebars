@@ -1,0 +1,99 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Administrador</a></li>
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Marketing</a></li>
+                    <li class="breadcrumb-item"><a href="#">Cupons</a></li>
+                    <li class="breadcrumb-item active">Formulário</li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+		{{> flash_message}}
+
+        <form id="form_coupon" action="<?php echo $route->pathFor('administrator.marketing.coupon.record'); ?><?php echo (is_object($e) ? "/{$e->getHash()}" : null); ?>"
+              method="post">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- START card -->
+                    <div class="card card-default full-height">
+                        <div class="card-header ">
+                            <div class="card-title">
+                                Dados da Cupom
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>Cupom</label>
+                                        <input type="text" class="form-control" required name="coupon"  value="<?php echo (is_object($e)) ? $e->getCoupon() : ''; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>Desconto em %</label>
+                                        <input type="text" class="form-control" required name="discount" value="<?php echo (is_object($e)) ? $e->getDiscount() : ''; ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>Data de Início</label>
+                                        <input type="text" class="form-control" required name="started_at"
+                                               data-mask="00/00/0000" value="<?php echo (is_object($e)) ? $e->getStartedAt()->format('d/m/Y') : ''; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>Data do Término</label>
+                                        <input type="text" class="form-control" required name="finished_at"
+                                               data-mask="00/00/0000"  value="<?php echo (is_object($e)) ? $e->getFinishedAt()->format('d/m/Y') : ''; ?>">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br><br>
+
+                            <p class="text-right">
+                                <button type="submit" class="btn btn-info">
+                                    <span>Salvar Cupom</span>
+                                </button>
+                            </p>
+
+                        </div>
+
+                    </div>
+                    <!-- END card -->
+                </div>
+            </div>
+
+        </form>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}
+
+<script>
+
+    $("#form_coupon").validate();
+
+</script>

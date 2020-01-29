@@ -1,0 +1,90 @@
+<div class="table-responsive">
+    <table class="table table-hover" id="basicTable">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Chamado</th>
+            <th>Status</th>
+            <th>Setor</th>
+            <th>Última Atualização</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+
+		<?php
+
+		use App\Entity\School\Ticket\Ticket;
+
+		/**
+		 * @var Ticket $r
+		 */
+		if (count($result) > 0) {
+			foreach ($result as $r) { ?>
+
+                <tr>
+                    <td class="v-align-middle ">
+                        <p><?php echo $r->getHash(); ?></p>
+                    </td>
+                    <td class="v-align-middle">
+                        <p><?php echo $r->getSubject(); ?></p>
+                    </td>
+                    <td class="v-align-middle">
+                        <p>
+							<?php
+
+							if ($r->getStatus() == Ticket::TICKET_STATUS_ACTIVE)
+								echo 'Aberto';
+
+							if ($r->getStatus() == Ticket::TICKET_STATUS_ANSWERED)
+								echo 'Respondido pela secretaria';
+
+							if ($r->getStatus() == Ticket::TICKET_STATUS_CLOSED)
+								echo 'Finalizado';
+
+							if ($r->getStatus() == Ticket::TICKET_STATUS_WAITING)
+								echo 'Aguardando secretaria';
+
+							?>
+                        </p>
+                    </td>
+                    <td class="v-align-middle">
+                        <p>
+							<?php
+
+							if ($r->getSector() == Ticket::TICKET_SECTOR_COURSE)
+								echo 'Acadêmico';
+
+							if ($r->getSector() == Ticket::TICKET_SECTOR_FINANCIAL)
+								echo 'Financeiro';
+
+							if ($r->getSector() == Ticket::TICKET_SECTOR_GENERAL)
+								echo 'Geral';
+
+							?>
+                        </p>
+                    </td>
+                    <td class="v-align-middle">
+                        <p><?php echo $r->getUpdatedAt()->format('d/m/Y'); ?></p>
+                    </td>
+                    <td class="v-align-middle">
+                        <a href="<?php echo $route->pathFor('student.tickets.view', ['hash' => $r->getHash()]); ?> " class="btn btn-default">
+                            <i class="fa fa-edit fs-15"></i> Abrir Chamado
+                        </a>
+                    </td>
+                </tr>
+
+			<?php }
+		} else { ?>
+
+            <tr>
+                <td colspan="6">
+                    <h4 class="text-danger text-center"> Nenhum registro de chamado encontrado</h4>
+                </td>
+            </tr>
+
+		<?php } ?>
+
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,157 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+		<?php
+
+		$d = [
+			['RG', 'Cópia Simples', 1],
+			['CPF', 'Cópia Simples', 2],
+			['Certidão de Nascimento/Casamento', 'Cópia Simples', 3],
+			['Titulo de Eletitor', 'Cópia Simples', 4],
+			['Comprovante de Residencia', 'Cópia Simples', 5],
+			['Foto 3x4', 'Cópia Simples', 6],
+			['Histórico Escolar', 'Cópia Autenticadas', 7],
+			['Diploma', 'Cópia Autenticadas', 8],
+			['Histórico Escolar', 'Cópia Autenticadas p/ 2a Licenciatura/R2', 9],
+			['Diploma', 'Cópia Autenticadas p/ 2a Licenciatura/R2', 10],
+			['Histórico Escolar Ensino Médio', 'Cópia Autenticadas p/ 2a Licenciatura/R2', 11],
+		]
+		?>
+
+		{{> flash_message}}
+
+        <form id="form_student"
+              action="<?php echo $route->pathFor('student.profile.document.save', ['hash' => $user->getHash()]); ?>"
+              method="post"
+              enctype="multipart/form-data">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- START card -->
+                    <div class="card card-default full-height m-b-0">
+
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="basicTable">
+                                <thead>
+                                <tr>
+                                    <th>Documentos</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+								<?php
+								$tt = 1;
+								foreach ($d as $dd => $doc) {
+									foreach ($user->getDocument() as $user_doc) {
+
+										$doc_ob = null;
+										if (is_object($user_doc))
+											if ($user_doc->getType() == $doc[2]) {
+												$doc_ob = $user_doc;
+												break;
+											}
+									}
+
+									?>
+                                    <tr>
+                                        <td class="v-align-middle ">
+                                            <p><?php echo $doc[0] ?></p>
+                                            <small><?php echo $doc[1] ?></small>
+                                        </td>
+                                        <td class="v-align-middle">
+
+											<?php if (is_object($doc_ob)) { ?>
+
+												<?php if ($doc_ob->getStatus() == 1) { ?>
+                                                    <span class="label label-success">Enviado</span>
+												<?php } else { ?>
+                                                    <span class="label label-danger">Reenviar Arquivo</span>
+												<?php } ?>
+
+											<?php } else { ?>
+                                                <span class="label label-warning">Aguardando Arquivo</span>
+											<?php } ?>
+
+                                        </td>
+                                        <td>
+											<?php if (!is_object($doc_ob)) { ?>
+                                                <div class="form-group form-group-default">
+                                                    <label>Arquivo</label>
+                                                    <input type="file" class="form-control"
+                                                           name="doc[<?php echo $doc[2]; ?>]">
+                                                </div>
+											<?php } else { ?>
+												<?php if ($doc_ob->getStatus() == 1) { ?>
+                                                    <a href="<?php echo $route->pathFor('student.open.document', ['hash' => $doc_ob->getHash()]); ?>"
+                                                       class="btn btn-secondary w-100 delete" target="_blank">
+                                                        <span class="p-t-5 p-b-5 "> <i
+                                                                    class="fa fa-file fs-15"></i> </span> <br>
+                                                        <span class="fs-11 font-montserrat text-uppercase">Abrir Documento</span>
+                                                    </a>
+												<?php } else { ?>
+                                                    <input type="hidden" name="doce[<?php echo $doc[2]; ?>]"
+                                                           value="<?php echo $doc_ob->getHash(); ?>">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Arquivo</label>
+                                                        <input type="file" class="form-control"
+                                                               name="doc[<?php echo $doc[2]; ?>]">
+                                                    </div>
+												<?php } ?>
+											<?php } ?>
+                                        </td>
+                                    </tr>
+
+									<?php
+									$tt++;
+
+								} ?>
+
+                                </tbody>
+                            </table>
+
+                            <br>
+
+                            <div class="col text-right">
+                                <button type="submit" class="btn  btn-primary">
+                                    <span>Enviar Documento</span>
+                                </button>
+                            </div>
+                            <br>
+
+
+                        </div>
+
+
+                    </div>
+                    <!-- END card -->
+                </div>
+
+            </div>
+
+        </form>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}

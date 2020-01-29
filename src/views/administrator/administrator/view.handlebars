@@ -1,0 +1,206 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Administrador</a></li>
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Administrador</a></li>
+                    <li class="breadcrumb-item">Formulário</li>
+                    <li class="breadcrumb-item active"><?php echo $administrator->getFirstName(); ?></li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+        {{> flash_message}}
+
+        <form id="form_administrator"
+              action="<?php echo $route->pathFor('administrator.administrator.view', ['hash' => $administrator->getHash()]); ?>"
+              method="post">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- START card -->
+                    <div class="card card-default full-height" style="border: 0">
+                        <div class="card-header ">
+                            <div class="card-title">
+                                Dados Pessoais do Colaborador
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5>
+                                Dados Gerais
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>Nome</label>
+                                        <input type="text" class="form-control" required name="first_name"
+                                               value="<?php echo $administrator->getFirstName(); ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Sobrenome</label>
+                                        <input type="text" class="form-control" name="last_name"
+                                               value="<?php echo $administrator->getLastName(); ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-group-default required ">
+                                <label>E-mail</label>
+                                <input type="email" class="form-control" required name="email"
+                                       value="<?php echo $administrator->getEmail(); ?>">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>CPF</label>
+                                        <input type="text" class="form-control" required name="document_cpf"
+                                               data-mask="000.000.000-00" data-mask-reverse="true"
+                                               value="<?php echo $administrator->getDocumentCpf(); ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Data de Nascimento</label>
+                                        <input type="text" class="form-control" name="birthday"
+                                               data-mask="00/00/0000"
+                                               value="<?php echo is_object($administrator->getBirthday()) ? $administrator->getBirthday()->format('d/m/Y') : ''; ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>RG</label>
+                                        <input type="text" class="form-control" required name="document_rg"
+                                               value="<?php echo $administrator->getDocumentRg(); ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Orgão Expedidor</label>
+                                        <input type="text" class="form-control" name="document_rg_origem"
+                                               value="<?php echo $administrator->getDocumentRgOrigem(); ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Telefone</label>
+                                        <input type="text" class="form-control" required name="phone"
+                                               data-mask="00 0000.00000"
+                                               value="<?php echo $administrator->getPhone(); ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Celular</label>
+                                        <input type="text" class="form-control" name="cellphone"
+                                               data-mask="00 0000.00000"
+                                               value="<?php echo $administrator->getCellPhone(); ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class=" form-group form-group-default form-group-default-select2 required">
+                                        <label class="">Status</label>
+                                        <select class="full-width" data-placeholder="status" name="status"
+                                                data-init-plugin="select2">
+                                            <optgroup label="Status ">
+                                                <option value="1" <?php echo \App\Entity\School\User\User::USER_ACTIVE == $administrator->getStatus() ? 'selected' : ''; ?>>Ativo</option>
+                                                <option value="0" <?php echo \App\Entity\School\User\User::USER_INACTIVE == $administrator->getStatus() ? 'selected' : ''; ?>>Inativo</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <br><br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>CEP</label>
+                                        <input type="text" class="form-control" required name="zip"
+                                               value="<?php echo $administrator->getAddress()->getZip(); ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-group-default required ">
+                                <label>Endereço</label>
+                                <input type="text" class="form-control" required name="address"
+                                       value="<?php echo $administrator->getAddress()->getAddress(); ?>">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>Número</label>
+                                        <input type="text" class="form-control" required name="number"
+                                               value="<?php echo $administrator->getAddress()->getNumber(); ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Complemento</label>
+                                        <input type="text" class="form-control" name="complement"
+                                               value="<?php echo $administrator->getAddress()->getComplement(); ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group form-group-default required">
+                                <label>Bairro</label>
+                                <input type="text" class="form-control" required name="district"
+                                       value="<?php echo $administrator->getAddress()->getDistrict(); ?>">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group form-group-default required">
+                                        <label>Cidade</label>
+                                        <input type="text" class="form-control" required name="city"
+                                               value="<?php echo $administrator->getAddress()->getCity(); ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group form-group-default required">
+                                        <label>Estado</label>
+                                        <input type="text" class="form-control" required name="state"
+                                               maxlength="2"
+                                               value="<?php echo $administrator->getAddress()->getState(); ?>">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br><br>
+
+                            <p class="text-right">
+                                <button type="submit" class="btn btn-info">
+                                    <span>Salvar Administrador</span>
+                                </button>
+                            </p>
+
+                        </div>
+                    </div>
+                    <!-- END card -->
+                </div>
+            </div>
+
+        </form>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}

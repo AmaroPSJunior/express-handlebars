@@ -1,0 +1,260 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Meus Cursos</a></li>
+                    <li class="breadcrumb-item active">Cursos Matriculados</li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+		{{> flash_message}}
+
+        <ul class="nav nav-tabs nav-tabs-fillup" data-init-reponsive-tabs="dropdownfx">
+            <li class="nav-item">
+                <a href="#tab1" class="active" data-toggle="tab"
+                   data-target="#tab-1"><span>Cursos Ativos (<?php echo count($all_course_started) ?>)</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="#tab2" class="" data-toggle="tab"
+                   data-target="#tab-2"><span>Cursos Aguardando Inicio (<?php echo count($all_course_not_started) ?>)</span></a>
+            </li>
+        </ul>
+
+
+        <div class="tab-content">
+
+            <div class="tab-pane active" id="tab-1">
+                <div class="card card-default full-height" style="border: 0">
+                    <div class="card-header ">
+                        <div class="card-title">
+                            Cursos Ativos
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5>
+                            Lista de cursos iniciados
+                        </h5>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="basicTable">
+                                <thead>
+                                <tr>
+                                    <th width="140"></th>
+                                    <th width="30%">Curso</th>
+                                    <th>Iniciado</th>
+                                    <th>Finalizado</th>
+                                    <th>Prazo Até</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+								<?php
+								if (count($all_course_started) > 0) {
+								foreach ($all_course_started as $courses) { ?>
+
+                                    <tr>
+                                        <td class="v-align-middle">
+											<?php if (is_null($courses['thumb'])) { ?>
+                                                <img src="/client/demos/thumb_course.jpg" width="140">
+											<?php } else { ?>
+                                                <img src="<?php echo $route->pathFor('course.thumb', ['hash' => $courses['hash_course']]); ?>"
+                                                     width="140">
+											<?php } ?>
+                                        </td>
+                                        <td class="v-align-middle">
+                                            <p><?php echo $courses['item']; ?></p>
+                                            <small> <?php echo $courses['type'] . ' ' . $courses['time'] . ' horas'; ?></small>
+                                            <br><br>
+                                            <div class="progress">
+                                                <div class="progress-bar progress-bar-success"
+                                                     style="width:<?php echo number_format($progress($courses['hash_course'], $courses['hash_order_course'], $user_session->getHash())[0]['percentage'], 0); ?>%"></div>
+                                            </div>
+                                        </td>
+                                        <td class="v-align-middle">
+                                            <p><?php echo $courses['started'] == '' ? ' Não Iniciado ' : $courses['started']; ?></p>
+                                        </td>
+                                        <td class="v-align-middle">
+                                            <p><?php
+
+												echo $courses['finished'] == '' ? ' -- ' : $courses['finished'];
+
+												?></p>
+                                        </td>
+                                        <td class="v-align-middle">
+											<?php
+											if ($courses['max_month'] != 0) {
+												$date = date_create($courses['started_at']);
+												date_add($date, date_interval_create_from_date_string($courses['max_month'] . ' months'));
+												echo date_format($date, 'd/m/Y');
+											} else {
+												echo 'Ilimitado';
+											}
+											?>
+                                        </td>
+                                        <td class="v-align-middle">
+                                            <a class="btn btn-default"
+                                               href="<?php echo $route->pathFor('student.courses.modules', ['hash' => $courses['hash_course'], 'hash_order_course' => $courses['hash_order_course']]); ?>">
+                                                <i class="fa fa-edit fs-15"></i> Abrir
+                                            </a>
+                                        </td>
+                                    </tr>
+
+								<?php }
+								} else { ?>
+
+                                    <tr>
+                                        <td colspan="7">
+                                            <h4 class="text-danger text-center"> Nenhum curso ativo até o momento </h4>
+
+											<?php if (count($all_course_not_started) > 0) { ?>
+                                                <h5 class="text-info text-center" onclick='o();'> Clique aqui para
+                                                    iniciar um curso </h5>
+											<?php } ?>
+                                        </td>
+                                    </tr>
+                                    <script>
+                                        function o() {
+                                            $('.nav-tabs a[href="#tab2"]').tab('show');
+                                        }
+                                    </script>
+								<?php } ?>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <small>*Não é possivel ter mais de 1 (um) curso de mesmo tipo ativo</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="tab-2">
+                <div class="card card-default full-height" style="border: 0">
+                    <div class="card-header ">
+                        <div class="card-title">
+                            Cursos Aguardando Inicio
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5>
+                            Lista de cursos aguardando inicio
+                        </h5>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="basicTable">
+                                <thead>
+                                <tr>
+                                    <th width="140"></th>
+                                    <th>Curso</th>
+                                    <th>Prazo Após Inicio</th>
+                                    <th>Data da Matricula</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+								<?php
+								if (count($all_course_not_started) > 0) {
+									foreach ($all_course_not_started as $courses) { ?>
+
+                                        <tr>
+                                            <td class="v-align-middle">
+												<?php if (is_null($courses['thumb'])) { ?>
+                                                    <img src="/client/demos/thumb_course.jpg" width="140">
+												<?php } else { ?>
+                                                    <img src="<?php echo $route->pathFor('course.thumb', ['hash' => $courses['hash_course']]); ?>"
+                                                         width="140">
+												<?php } ?>
+                                            </td>
+                                            <td class="v-align-middle">
+                                                <p><?php echo $courses['item']; ?></p>
+                                                <small> <?php echo $courses['type'] . ' ' . $courses['time'] . ' horas'; ?></small>
+                                            </td>
+                                            <td class="v-align-middle">
+                                                <p><?php echo $courses['max_month']; ?> meses</p>
+                                            </td>
+                                            <td class="v-align-middle">
+                                                <p><?php echo $courses['created']; ?></p>
+                                            </td>
+                                            <td class="v-align-middle">
+                                                <a data-href="<?php echo $route->pathFor('student.courses.start', ['hash_order_course' => $courses['hash_order_course']]); ?>"
+                                                   class="btn btn-default btn-start-course">
+                                                    <i class="fa fa-play fs-15"></i> Iniciar </span>
+                                                </a>
+                                            </td>
+                                        </tr>
+
+									<?php }
+								} else { ?>
+
+                                    <tr>
+                                        <td colspan="7">
+                                            <h4 class="text-danger text-center">
+                                                Nenhum registro de matricula encontrado
+                                        </td>
+                                    </tr>
+
+								<?php } ?>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}
+
+<script>
+    $(document).ready(function () {
+
+        $('.btn-start-course').click(function () {
+            var data_url = $(this).attr('data-href');
+
+            Swal.fire({
+                title: 'Deseja mesmo iniciar o curso?',
+                text: "Lembre-se que você só pode ter um curso ativo da mesma modalidade ao msmo tempo (saiba mais).",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, quero iniciar!',
+                cancelButtonText: 'Cancelar',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+
+                    return fetch(data_url).then(response => {
+                        location.reload(true)
+                    }).catch(error => {
+                        location.reload(true)
+                    })
+
+                }
+            })
+
+        })
+
+    })
+</script>

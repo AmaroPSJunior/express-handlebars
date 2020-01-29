@@ -1,0 +1,213 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Administrador</a></li>
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Cursos</a></li>
+                    <li class="breadcrumb-item active">Novo Curso</li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+
+		{{> flash_message}}
+
+        <form id="form_course" role="form" action="<?php echo $route->pathFor('administrator.courses.record.one'); ?>"  enctype="multipart/form-data"
+              method="post">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- START card -->
+                    <div class="card card-default">
+                        <div class="card-header ">
+                            <div class="card-title">
+                                Formulário de Novo Curso
+                            </div>
+                        </div>
+                        <div class="card-body">
+
+                            <h5>Curso</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-group-default required">
+                                        <label>Curso</label>
+                                        <input type="text" class="form-control" required name="course">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class=" form-group form-group-default form-group-default-select2 required">
+                                        <label class="">Tipo do Curso</label>
+                                        <select class="full-width" data-placeholder="tipo" name="type"
+                                                data-init-plugin="select2">
+                                            <optgroup label="Escolha um tipo">
+
+												<?php foreach ($types as $type) { ?>
+                                                    <option value="<?php echo $type->getHash(); ?>"><?php echo $type->getType(); ?>
+                                                        - <?php echo $type->getTime(); ?> horas
+                                                    </option>
+												<?php } ?>
+
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class=" form-group form-group-default form-group-default-select2 required">
+                                        <label class="">Categoria do Curso</label>
+                                        <select class="full-width" data-placeholder="categoria" name="category"
+                                                data-init-plugin="select2">
+                                            <optgroup label="Categoria do Curso">
+												<?php foreach ($categories as $category) { ?>
+                                                    <option value="<?php echo $category->getHash(); ?>"><?php echo $category->getCategory(); ?></option>
+												<?php } ?>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class=" form-group form-group-default form-group-default-select2 required">
+                                        <label class="">Status</label>
+                                        <select class="full-width" data-placeholder="status" name="status"
+                                                data-init-plugin="select2">
+                                            <optgroup label="Status do Curso">
+                                                <option value="1">Ativo</option>
+                                                <option value="2">Inativo</option>
+                                                <option value="3">Cancelado</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class=" form-group form-group-default form-group-default-select2 required">
+                                        <label class="">Tutor Responsável</label>
+                                        <select class="full-width" data-placeholder="Escolha um Tutor Responsável"
+                                                name="academic" data-init-plugin="select2">
+                                            <option value="" selected> ---</option>
+                                            <optgroup label="Tutor Reponsável">
+												<?php foreach ($academics as $academic) { ?>
+                                                    <option value="<?php echo $academic->getHash(); ?>"><?php echo $academic->getName(); ?></option>
+												<?php } ?>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class=" form-group form-group-default  required">
+                                        <label>Capa do Curso</label>
+                                        <input name="thumb" type="file" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br>
+
+                            <h5>Módulos</h5>
+                            <div id="clone" class="col-12">
+
+                                <div class="row toclone ">
+
+                                    <div class="col-md-8 form-group form-group-default form-group-default-select2 required">
+                                        <label>Nome do Módulo</label>
+
+                                        <select class="full-width select2" data-placeholder="Escolha um Módulo"
+                                                name="modules[]" data-init-plugin="select2">
+                                            <option value="" selected> ---</option>
+                                            <optgroup label="Módulo">
+												<?php foreach ($modules as $module) { ?>
+                                                    <option value="<?php echo $module->getHash(); ?>"><?php echo mb_strtoupper($module->getModule()); ?></option>
+												<?php } ?>
+                                            </optgroup>
+                                        </select>
+
+                                    </div>
+
+                                    <div class="col-md-4 btns">
+
+                                        <div class="btn-group btn-group-justified row w-100">
+                                            <div class="btn-group col-4 p-0">
+                                                <a type="button " class="btn btn-warning w-100 clone">
+                                                    <span class="p-t-5 p-b-5 text-black"> <i
+                                                                class="fa fa-plus fs-15"></i></span>
+                                                    <br>
+                                                    <span class="fs-11 font-montserrat text-black text-uppercase">Adicionar</span>
+                                                </a>
+                                            </div>
+                                            <div class="btn-group col-4 p-0">
+                                                <a type="button " class="btn btn-danger w-100 delete">
+                                                    <span class="p-t-5 p-b-5 text-white"> <i
+                                                                class="fa fa-remove fs-15"></i> </span>
+                                                    <br>
+                                                    <span class="fs-11 font-montserrat text-uppercase text-white">Remover</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <br><br>
+
+                            <p class="text-right">
+                                <button type="submit" class="btn btn-info">
+                                    <span>Salvar Curso e Continuar</span>
+                                </button>
+                            </p>
+
+
+                        </div>
+
+                    </div>
+                    <!-- END card -->
+                </div>
+
+            </div>
+
+        </form>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}
+
+
+<script>
+    $('#clone').cloneya({
+        serializeID: true,
+        cloneButton: '.btns .btn-group .btn-group .clone',
+        deleteButton: '.btns .btn-group .btn-group .delete'
+
+    })
+        .on('before_clone.cloneya', function (event, toClone, newClone) {
+            var $select = $('.select2').select2();
+            $select.each(function (i, item) {
+                $(item).select2("destroy");
+            });
+        })
+        .on('after_append.cloneya', function (event, toClone, newClone) {
+            $('select').select2();
+        });
+
+    $("#form_course").validate();
+
+</script>

@@ -1,0 +1,110 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Financeiro</a></li>
+                    <li class="breadcrumb-item active">Histórico</li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+		{{> flash_message}}
+
+
+        <div class="tab-content">
+
+            <div class="card card-default full-height">
+                <div class="card-header ">
+                    <div class="card-title">
+                        Painel Financeiro
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h5>
+                        Lista de matriculas
+                    </h5>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="basicTable">
+                            <thead>
+                            <tr>
+                                <th>Matrícula</th>
+                                <th>Valor Final</th>
+                                <th>Desconto</th>
+                                <th>Parcelas</th>
+                                <th>Qtd. de Cursos</th>
+                                <th>Data do Registro</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+							<?php
+							if (count($orders) > 0) {
+								foreach ($orders as $order) { ?>
+
+                                    <tr>
+                                        <td class="v-align-middle ">
+                                            <p><?php echo $order->getHash(); ?></p>
+                                        </td>
+                                        <td class="v-align-middle">
+                                            <p>R$ <?php echo number_format($order->getPriceFinal(), 2, ',', '.'); ?></p>
+                                        </td>
+                                        <td class="v-align-middle ">
+                                            <p><?php echo $order->getDiscount(); ?>%</p>
+                                        </td>
+                                        <td class="v-align-middle ">
+                                            <p><?php echo $order->getInstallments(); ?>x</p>
+                                        </td>
+                                        <td class="v-align-middle ">
+                                            <p><?php echo count($order->getOrderCourses()); ?></p>
+                                        </td>
+                                        <td class="v-align-middle">
+                                            <p><?php echo $order->getCreatedAt()->format('d/m/Y'); ?></p>
+                                        </td>
+                                        <td class="v-align-middle">
+                                            <a href="<?php echo $route->pathFor('student.financial.details', ['hash' => $order->getHash()]); ?> "
+                                               class="btn btn-secondary w-100">
+                                                <span class="p-t-5 p-b-5 "> <i class="fa fa-info fs-15"></i> </span>
+                                                <br>
+                                                <span class="fs-11 font-montserrat text-uppercase">Detalhes</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+
+								<?php }
+							} else { ?>
+
+                                <tr>
+                                    <td colspan="6">
+                                        <h4 class="text-danger text-center"> Nenhum registro encontrado</h4>
+                                    </td>
+                                </tr>
+
+							<?php } ?>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+{{> f}}

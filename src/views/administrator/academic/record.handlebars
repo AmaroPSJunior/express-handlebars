@@ -1,0 +1,182 @@
+{{> h}}
+
+<div class="content">
+    <!-- START JUMBOTRON -->
+    <div class="jumbotron" data-pages="parallax">
+        <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
+            <div class="inner">
+                <!-- START BREADCRUMB -->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Administrador</a></li>
+                    <li class="breadcrumb-item"><a href="#">Painel de Controle</a></li>
+                    <li class="breadcrumb-item"><a href="#">Tutoria</a></li>
+                    <li class="breadcrumb-item"><a href="#">Tutor</a></li>
+                    <li class="breadcrumb-item active">Formulário</li>
+                </ol>
+                <!-- END BREADCRUMB -->
+            </div>
+        </div>
+    </div>
+    <!-- END JUMBOTRON -->
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+        {{> flash_message}}
+
+        <form id="form_academic" action="<?php echo $route->pathFor('administrator.academic.record'); ?>" method="post">
+
+            <div class="row">
+            <div class="col-lg-12">
+                <!-- START card -->
+                <div class="card card-default full-height">
+                    <div class="card-header ">
+                        <div class="card-title">
+                            Dados Pessoais do Tutor
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5>
+                            Dados Gerais
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group form-group-default required">
+                                    <label>Nome</label>
+                                    <input type="text" class="form-control" required name="first_name">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group form-group-default">
+                                    <label>Sobrenome</label>
+                                    <input type="text" class="form-control" name="last_name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-group-default required ">
+                            <label>E-mail</label>
+                            <input type="email" class="form-control" required name="email">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group form-group-default required">
+                                    <label>CPF</label>
+                                    <input type="text" class="form-control" required name="document_cpf"
+                                           data-mask="000.000.000/00" data-mask-reverse="true">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group form-group-default">
+                                    <label>Data de Nascimento</label>
+                                    <input type="text" class="form-control" name="birthday" data-mask="00/00/0000">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group form-group-default required">
+                                    <label>RG</label>
+                                    <input type="text" class="form-control" required name="document_rg">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group form-group-default">
+                                    <label>Orgão Expedidor</label>
+                                    <input type="text" class="form-control" name="document_rg_origem">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group form-group-default required">
+                                    <label>Telefone</label>
+                                    <input type="text" class="form-control" required name="phone"
+                                           data-mask="00 0000.00000">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group form-group-default">
+                                    <label>Celular</label>
+                                    <input type="text" class="form-control" name="cellphone"
+                                           data-mask="00 0000.00000">
+                                </div>
+                            </div>
+                        </div>
+                        <br><br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group form-group-default required">
+                                    <label>CEP</label>
+                                    <input type="text" class="form-control" required name="zip">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-group-default required ">
+                            <label>Endereço</label>
+                            <input type="text" class="form-control" required name="address">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group form-group-default required">
+                                    <label>Número</label>
+                                    <input type="text" class="form-control" required name="number">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group form-group-default">
+                                    <label>Complemento</label>
+                                    <input type="text" class="form-control" name="complement">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-group-default required">
+                            <label>Bairro</label>
+                            <input type="text" class="form-control" required name="district">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group form-group-default required">
+                                    <label>Cidade</label>
+                                    <input type="text" class="form-control" required name="city">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group form-group-default required">
+                                    <label>Estado</label>
+                                    <input type="text" class="form-control" required name="state" maxlength="2">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <br><br>
+
+                        <p class="text-right">
+                            <button type="submit" class="btn btn-info">
+                                <span>Salvar Tutor</span>
+                            </button>
+                        </p>
+
+                    </div>
+
+                </div>
+                <!-- END card -->
+
+            </div>
+
+        </div>
+
+        </form>
+
+        <!-- END PLACE PAGE CONTENT HERE -->
+    </div>
+    <!-- END CONTAINER FLUID -->
+</div>
+
+{{> f}}
+
+<script>
+
+    $("#form_academic").validate();
+
+</script>

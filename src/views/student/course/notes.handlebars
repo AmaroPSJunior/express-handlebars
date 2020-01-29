@@ -1,0 +1,51 @@
+<div class="modal-header clearfix text-left">
+    <h3>Boletim </h3>
+    <h5><?php echo $course->getFullNameCourse(); ?> </h5>
+</div>
+<div class="modal-body">
+    <div class="card card-default full-height" style="border: 0">
+        <div class="card-body">
+
+
+            <table class="table table-hover" id="basicTable">
+                <thead>
+                <tr>
+                    <th>Módulo</th>
+                    <th>Tentativa</th>
+                    <th>Nota</th>
+                </tr>
+                </thead>
+                <tbody>
+				<?php
+				foreach ($notes as $note) { ?>
+
+                    <tr>
+                        <td class="v-align-middle ">
+                            <p><?php echo $note['module']; ?></p>
+                        </td>
+                        <td class="v-align-middle ">
+                            <p><?php echo $note['attempt']; ?></p>
+                        </td>
+                        <td class="v-align-middle">
+                            <p><?php
+
+                                if($note['note'] < \App\Entity\School\User\UserActivities::NOTE_TO_APPROVE)
+									echo '<span class="text-red">'.$note['note'].'</span>';
+                                else
+                                    echo '<span class="text-green">'.$note['note'].'</span>';
+
+                                ?></p>
+                        </td>
+                    </tr>
+
+				<?php } ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <small>*Este documento não possui valor oficial. As informações deste Boletim podem divergir do cadastro atual da Secretaria Acadêmica.</small>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+</div>
